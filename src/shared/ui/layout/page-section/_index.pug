@@ -1,8 +1,8 @@
 mixin page-section(data={})
-  .page-section(
+  section.page-section(
     class=data.className,
-    class=(data.theme ? `page-section--theme--${data.theme}` : null),
-    class=(data.size ? `page-section--size--${data.size}` : null),
+    class=(data.fill && "page-section--fill")
     data-role=data.role,
-  ) page-section
-  
+  )
+    .container
+      block

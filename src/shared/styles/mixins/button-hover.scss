@@ -1,0 +1,7 @@
+@mixin button-hover {
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      @content;
+    }
+  }
+}

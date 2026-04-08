@@ -1,3 +1,36 @@
-@import "page-section";
-@import "themes";
-@import "sizes";
+.page-section {
+  padding: var(--section-indent) 0;
+
+  &.bg-gray {
+    --background: #{map-get($colors, grey_bg)}; // FIX: было --backgrouund
+  }
+
+  &:first-child {
+    padding-top: 30px;
+  }
+
+  // Стык "белый-белый" (включая без класса): режем до 0.5 с обеих сторон
+  &:not(.bg-gray) + &:not(.bg-gray) {
+    padding-top: calc(var(--section-indent) / 2);
+  }
+
+  &:not(.bg-gray):has(+ .page-section:not(.bg-gray)) {
+    padding-bottom: calc(var(--section-indent) / 2);
+  }
+
+  // Стык "серый-серый": режем до 0.5 с обеих сторон
+  &.bg-gray + &.bg-gray {
+    padding-top: calc(var(--section-indent) / 2);
+  }
+
+  &.bg-gray:has(+ .page-section.bg-gray) {
+    padding-bottom: calc(var(--section-indent) / 2);
+  }
+}
+
+
+@media (max-width: 400px) {
+  .page-section h2:has(img:first-child) {
+		margin-bottom: 15px;
+	}
+}

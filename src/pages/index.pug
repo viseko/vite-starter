@@ -3,7 +3,15 @@ extends @/app/templates/_default
 block vars 
   - var title = "Главная страница"
 
-block body 
-  h1 Ну привет
-  p Тут какой-то сайт
-  +icon("kek", 23, 23)
+block body
+  +page-section
+    h1 Пример секции
+
+  +page-section 
+    h2 Вторая секция
+
+  +page-section({
+    className: "bg-black",
+    fill: true
+  }) 
+    h2 Вторая секция

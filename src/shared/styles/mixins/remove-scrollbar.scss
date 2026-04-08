@@ -1,0 +1,30 @@
+@mixin remove-scrollbar {
+  @media (hover: none), (pointer: coarse) {
+    overflow: auto;
+    scrollbar-color: transparent;
+    border: 0;
+    -ms-overflow-style: none;  /* Для Internet Explorer 10+ */
+    scrollbar-width: none;  /* Для Firefox */
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      background: transparent;  /* Для Chrome, Safari и Opera */
+    }
+  }
+}
+
+
+@mixin total-remove-scrollbar {
+  overflow: auto;
+  scrollbar-color: transparent;
+  border: 0;
+  -ms-overflow-style: none;  /* Для Internet Explorer 10+ */
+  scrollbar-width: none;  /* Для Firefox */
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;  /* Для Chrome, Safari и Opera */
+  }
+}

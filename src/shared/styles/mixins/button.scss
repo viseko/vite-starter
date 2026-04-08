@@ -1,0 +1,20 @@
+// Миксин для стилизации кнопок с кастомными параметрами.
+
+@mixin button($bg: #007bff, $color: #fff, $padding: 10px 20px, $radius: 4px) {
+  display: inline-block;
+  padding: $padding;
+  background-color: $bg;
+  color: $color;
+  border: none;
+  border-radius: $radius;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darken($bg, 10%);
+  }
+}
+
+// Пример
+// @include button(#ff4500, #fff, 12px 24px, 8px);

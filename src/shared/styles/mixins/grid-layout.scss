@@ -1,0 +1,88 @@
+/**
+ * Миксин для гибкого создания CSS Grid-сеток.
+ * Позволяет задавать колонки, ряды, промежутки и выравнивание элементов.
+ *
+ * @param {mixed} $columns - Структура колонок (по умолчанию: auto).
+ *   - Число: количество равных колонок (например, 3 → repeat(3, 1fr)).
+ *   - Список: точные размеры колонок (например, 200px 1fr 100px).
+ *   - "auto-fit" или "auto-fill": адаптивные колонки с minmax.
+ *   - "auto": автоматическая ширина колонок.
+ * @param {mixed} $rows - Структура рядов (по умолчанию: auto).
+ *   - Список: точные размеры рядов (например, 100px 200px).
+ *   - "auto": автоматическая высота рядов.
+ * @param {length} $gap - Общий промежуток между ячейками (по умолчанию: 0).
+ * @param {length} $column-gap - Промежуток между колонками (по умолчанию: наследуется от $gap).
+ * @param {length} $row-gap - Промежуток между рядами (по умолчанию: наследуется от $gap).
+ * @param {string} $justify-items - Выравнивание элементов по горизонтали (по умолчанию: stretch).
+ *   - Возможные значения: start, end, center, stretch.
+ * @param {string} $align-items - Выравнивание элементов по вертикали (по умолчанию: stretch).
+ *   - Возможные значения: start, end, center, stretch.
+ * @param {length} $min-size - Минимальная ширина колонок для auto-fit/auto-fill (по умолчанию: 200px).
+ *
+ * @example
+ * // Простая сетка с 3 равными колонками и общим gap
+ * .grid-simple {
+ *   @include grid-layout(3, auto, 20px);
+ * }
+ * // Результат: grid-template-columns: repeat(3, 1fr); gap: 20px;
+ *
+ * @example
+ * // Адаптивная сетка с auto-fit и кастомным минимальным размером
+ * .grid-responsive {
+ *   @include grid-layout(auto-fit, auto, 15px, 15px, stretch, stretch, 250px);
+ * }
+ * // Результат: grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;
+ *
+ * @example
+ * // Сетка с фиксированными колонками и рядами
+ * .grid-fixed {
+ *   @include grid-layout((200px 1fr 100px), (150px auto), 10px);
+ * }
+ * // Результат: grid-template-columns: 200px 1fr 100px; grid-template-rows: 150px auto; gap: 10px;
+ *
+ * @example
+ * // Сетка с центрированными элементами
+ * .grid-centered {
+ *   @include grid-layout(4, auto, 10px, 10px, center, center);
+ * }
+ * // Результат: repeat(4, 1fr); justify-items: center; align-items: center;
+ */
+ 
+ @mixin grid-layout(
+  $columns: auto,
+  $rows: auto,
+  $gap: 0,
+  $column-gap: $gap,
+  $row-gap: $gap,
+  $justify-items: stretch,
+  $align-items: stretch,
+  $min-size: 200px
+) {
+
+  // Обработка структуры колонок
+  @if type-of($columns) == list {
+    grid-template-columns: $columns; // Прямой список размеров (например, 200px 1fr)
+  } @else if $columns == auto-fit or $columns == auto-fill {
+    grid-template-columns: repeat($columns, minmax($min-size, 1fr)); // Адаптивные колонки
+  } @else if type-of($columns) == number {
+    grid-template-columns: repeat($columns, 1fr); // Равные колонки по числу
+  } @else {
+    grid-template-columns: $columns; // Значение как есть (например, auto)
+  }
+
+  // Обработка структуры рядов
+  @if type-of($rows) == list {
+    grid-template-rows: $rows; // Прямой список размеров (например, 100px 200px)
+  } @else {
+    grid-template-rows: $rows; // Значение как есть (например, auto)
+  }
+
+  // Установка промежутков
+  gap: $gap; // Общий промежуток для совместимости со старыми браузерами
+  column-gap: $column-gap; // Отдельный контроль над колонками
+  row-gap: $row-gap; // Отдельный контроль над рядами
+
+  // Выравнивание содержимого ячеек
+  justify-items: $justify-items;
+  align-items: $align-items;
+}

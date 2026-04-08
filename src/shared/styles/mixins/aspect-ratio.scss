@@ -1,0 +1,29 @@
+@mixin aspect-ratio($width, $height) {
+  @if type-of($width) != number or type-of($height) != number {
+    @error "Аргументы $width и $height должны быть числами";
+  }
+
+  @if $width == 0 {
+    @error "Ширина ($width) не может быть равна нулю";
+  }
+
+  position: relative;
+  width: 100%;
+
+  &::before {
+    content: "";
+    display: block;
+    padding-top: ($height / $width) * 100%;
+  }
+
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Пример
+// @include aspect-ratio(2, 3);

@@ -1,2 +1,5 @@
 @import "shared/styles";
-@import "shared/ui";
+
+@layer components {
+  @import "shared/ui";
+}

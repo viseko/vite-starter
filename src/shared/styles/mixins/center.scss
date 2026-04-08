@@ -1,0 +1,33 @@
+// Миксин для быстрого центрирования элементов (абсолютное, flex или grid).
+
+// Примеры:
+// 1. Полное центрирование
+// @include center(absolute); 
+
+// 2. Только горизонтально
+// @include center(flex, true, false); 
+
+@mixin center($method: absolute, $horizontal: true, $vertical: true) {
+  @if $method == absolute {
+    position: absolute;
+    @if $horizontal {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    @if $vertical {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    @if $horizontal and $vertical {
+      transform: translate(-50%, -50%);
+    }
+  } @else if $method == flex {
+    display: flex;
+    @if $horizontal { justify-content: center; }
+    @if $vertical { align-items: center; }
+  } @else if $method == grid {
+    display: grid;
+    @if $horizontal { justify-content: center; }
+    @if $vertical { align-items: center; }
+  }
+}

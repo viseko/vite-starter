@@ -1,0 +1,5 @@
+@mixin show-dropdown {
+  opacity: 100%;
+  pointer-events: all;
+  transform: translate(-50%, 0);
+}

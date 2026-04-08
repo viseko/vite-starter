@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': resolve(__dirname, 'src'),
         "@img": resolve(__dirname, "src/assets/img"),
+        "@fonts": resolve(__dirname, "")
       },
     },
     plugins: buildPlugins({
@@ -29,6 +30,7 @@ export default defineConfig(({ mode }) => {
         BASE_URL,
         PATH: {
           img: `${BASE_URL}/assets/img`,
+          fonts: `${BASE_URL}/assets/fonts`,
           video: `${BASE_URL}/assets/video`,
           json: `${BASE_URL}/assets/json`,
         },
@@ -41,13 +43,16 @@ export default defineConfig(({ mode }) => {
       assetsDir: 'assets',
       polyfillModulePreload: false,
       rollupOptions: {
-        input: { main: resolve(__dirname, 'src/main.ts') },
+        input: {
+          main: resolve(__dirname, 'src/main.ts'),
+          // styles: resolve(__dirname, 'src/main.scss'),
+        },
         output: {
           entryFileNames: 'assets/js/[name].min.js',
           chunkFileNames: 'assets/js/chunks/[name].js',
           assetFileNames: (assetInfo: any) =>
             assetInfo.name?.endsWith('.css')
-              ? 'assets/css/[name].min[extname]'
+              ? `assets/css/main.min[extname]`
               : 'assets/[name][extname]',
         },
       },
