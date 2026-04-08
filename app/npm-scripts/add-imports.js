@@ -160,15 +160,15 @@ function updateImports() {
 
   function want(map, filePath, line) {
     if (!map.has(filePath)) map.set(filePath, new Set());
-    map-get(filePath).add(line);
+    map.get(filePath).add(line);
   }
 
   for (const rootDir of rootDirs) {
     const rootAbs = path.resolve(rootDir);
 
     walkDirs(rootDir, (dir) => {
-      // 1) Гарантируем index.pug в каждой директории
-      const pugIndex = path.join(dir, "index.pug");
+      // 1) Гарантируем _index.pug в каждой директории
+      const pugIndex = path.join(dir, "_index.pug");
       ensureFileExists(pugIndex);
 
       // 2) index.scss НЕ создаём — синхронизируем только если он существует
@@ -181,7 +181,7 @@ function updateImports() {
       for (const childName of children) {
         const childDir = path.join(dir, childName);
 
-        const childPugIndex = path.join(childDir, "index.pug");
+        const childPugIndex = path.join(childDir, "_index.pug");
         if (fs.existsSync(childPugIndex)) {
           want(desiredPugImportsByFile, pugIndex, buildPugInclude(pugIndex, childPugIndex));
         }
@@ -209,10 +209,10 @@ function updateImports() {
       if (!path.resolve(parentDir).startsWith(rootAbs2)) return;
       if (path.resolve(dir) === rootAbs2) return; // сам root не импортируется в родителя
 
-      const parentPugIndex = path.join(parentDir, "index.pug");
+      const parentPugIndex = path.join(parentDir, "_index.pug");
       ensureFileExists(parentPugIndex);
 
-      const childPugIndex = path.join(dir, "index.pug");
+      const childPugIndex = path.join(dir, "_index.pug");
       if (fs.existsSync(childPugIndex)) {
         want(desiredPugImportsByFile, parentPugIndex, buildPugInclude(parentPugIndex, childPugIndex));
       }
