@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    /* База */
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    /* Vite */
+    "types": ["vite/client"],
+
+    /* Пути (если используешь @) */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* Строгость (адекватная) */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+
+    /* Полезное */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    /* Сборка */
+    "isolatedModules": true,
+    "noEmit": true,
+
+    /* DX */
+    "skipLibCheck": true
+  },
+
+  "include": ["src"],
+  "exclude": ["node_modules", "build"]
+}

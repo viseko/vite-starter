@@ -1,0 +1,13 @@
+mixin video(data={})
+  video(
+    class=data.className,
+    data-role=data.role,
+    src=`${PATH.video}/${data.src}`,
+    type="video/mp4",
+    playsinline
+  )&attributes({
+    ...(Boolean(data.autoplay) && {autoplay: ""}),
+    ...(Boolean(data.muted) && {muted: ""}),
+    ...(Boolean(data.loop) && {loop: ""}),
+  })
+  

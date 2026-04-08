@@ -1,0 +1,29 @@
+mixin btn-element(data={})
+  -var tag = (data.type === "div" && "div") || (data.href && "a") || "button"
+  -var baseClass = data.baseClass
+
+  #{tag}(
+    id=data.id,
+    class=data.className,
+    class=baseClass,
+    class=((data.theme && baseClass) ? `${baseClass}--theme--${data.theme}` : null),
+    class=((data.size  && baseClass) ? `${baseClass}--size--${data.size}` : null),
+    data-role=data.role,
+    data-tooltip=data.tooltip,
+    title=data.title,
+
+    href=data.href,
+    target=(data.blank ? "_blank" : null),
+    rel=(data.blank ? "noopener noreferrer" : null),
+
+    type=(tag === "button" && (data.type || "button")),
+    disabled=data.disabled,
+
+    class=(data.modal && "js-show-modal")
+    data-target=data.modal
+    data-modal-title=data.modalTitle,
+    data-modal-subtitle=data.modalSubtitle,
+    data-modal-form-placement=data.modalFormName,
+    data-content=data.modalContent
+  )&attributes(data.attributes)
+    block

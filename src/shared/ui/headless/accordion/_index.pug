@@ -1,0 +1,9 @@
+mixin accordion(data={})
+  .js-accordion(
+    class=data.className,
+    class=(data.theme ? `accordion--theme--${data.theme}` : null),
+    class=(data.size ? `accordion--size--${data.size}` : null),
+    data-role=data.role,
+    data-name=data.name
+  )
+    block

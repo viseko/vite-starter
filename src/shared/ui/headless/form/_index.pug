@@ -1,0 +1,27 @@
+mixin form(data={})
+  form.form.js-form(
+    class=data.className
+    action=(data.action || "/orders.php")
+    name=data.name
+    method=data.method
+    id=data.id
+    data-lock-submit=data.lockSubmit
+    data-reset=data.reset
+  )&attributes(data.attributes)
+    block
+    //- if (data.success)
+    //-   +form-success
+  
+mixin form--nojs(data={})
+  form(
+    class=data.className
+    action=(data.action || "/orders.php")
+    name=data.name
+    method=data.method
+    id=data.id
+    data-lock-submit=data.lockSubmit
+    data-reset=data.reset
+  )&attributes(data.attributes)
+    block
+    //- if (data.success)
+    //-   +form-success

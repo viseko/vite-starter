@@ -1,0 +1,43 @@
+mixin _img(data, srcset=null)
+  img(
+    class=data.className,
+    class=(data.emerge && "emerge"),
+    src=((/^http[s]/).test(data.src) ? data.src : `${PATH.img}/${data.src}`),
+    srcset=srcset,
+    alt=(data.alt ? data.alt.replace(/&nbsp;/g, " ") : ""),
+    width=data.width,
+    height=data.height,
+    loading=("lazy")
+  )&attributes({
+    ...data.attributes
+  })
+
+mixin img(data={})
+  -
+    var ext  = data.src.match(/(\.[a-z]+)$/i)[0]
+    var base = data.src.replace(/(\.[a-z]+)$/i, "")
+
+    // mobile srcset
+    var mobileSrcset = null
+    if (data.mobile === 1) {
+      // mobile:1 → только mobile + десктоп ретина (если x2)
+      mobileSrcset = `${base}_mobile${ext}`
+      if (data.x2) mobileSrcset += `, ${base}${ext} 2x`
+    } else if (data.mobile) {
+      // mobile:2 → mobile + mobile@2x (если x2)
+      mobileSrcset = `${base}_mobile${ext}`
+      if (data.x2) mobileSrcset += `, ${base}_mobile@2x${ext} 2x`
+    }
+
+    // desktop retina
+    var x2Srcset = data.x2 ? `${base}@2x${ext} 2x` : null
+
+  if (data.mobile)
+    picture
+      source(
+        media=(data.media || "(max-width: 576px)"),
+        srcset=mobileSrcset
+      )
+      +_img(data, data.x2 ? (x2Srcset || mobileSrcset) : null)
+  else
+    +_img(data, x2Srcset)

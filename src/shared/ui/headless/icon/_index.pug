@@ -1,0 +1,7 @@
+mixin icon(icon, width, height, className)
+  svg(
+    width=width
+    height=height
+    class=className
+  )
+    use(xlink:href=`${PATH.img}/sprite.svg?v=${TIMESTAMP}#${icon}`)

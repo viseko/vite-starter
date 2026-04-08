@@ -1,0 +1,8 @@
+mixin page-section(data={})
+  .page-section(
+    class=data.className,
+    class=(data.theme ? `page-section--theme--${data.theme}` : null),
+    class=(data.size ? `page-section--size--${data.size}` : null),
+    data-role=data.role,
+  ) page-section
+  

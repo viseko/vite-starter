@@ -1,0 +1,117 @@
+{
+  "Тег <a>": {
+    "prefix": "a",
+    "body": [
+      "+a({",
+      "  className: \"\",",
+      "  href: \"#\",",
+      "  text: \"$1\",",
+      "  blank: false,",
+      "  attributes: {}",
+      "})"
+    ],
+    "description": ""
+  },
+  "Тег <img>": {
+    "prefix": "img",
+    "body": [
+      "img(",
+      "  src=`@img/`,",
+      "  srcset=`@img/ 2x`,",
+      "  alt=\"\",",
+      "  width=\"\",",
+      "  height=\"\" ",
+      ")"
+    ],
+    "description": ""
+  },
+  "SVG-иконка из спрайта": {
+    "prefix": "icon",
+    "body": [
+      "+icon(\"$1\", $2, $3)"
+    ],
+    "description": ""
+  },
+  "Хлебные крошки": {
+    "prefix": "breadcrumbs",
+    "body": [
+      "+breadcrumbs({",
+      "  className: \"\",",
+      "  list: [",
+      "    [\"$1\", \"$2\"],",
+      "  ]",
+      "})"
+    ],
+    "description": ""
+  },
+  "Кнопка или ссылка с классом btn": {
+    "prefix": "btn",
+    "body": [
+      "+btn({",
+      "  className: \"\",",
+      "  text: \"\",",
+      "  theme: \"\",",
+      "  size: \"\",",
+      "  disabled: false,",
+      "  type: null,",
+      "  role: null,",
+      "  href: null,",
+      "  blank: false,",
+      "  attributes: {}",
+      "})"
+    ],
+    "description": ""
+  },
+  "Кнопка-иконка": {
+    "prefix": "btn-icon",
+    "body": [
+      "+btn-icon({",
+      "  className: \"\",",
+      "  icon: {",
+      "    name: \"\",",
+      "    width: 24,",
+      "    height: 24,",
+      "  },",
+      "  disabled: false,",
+      "  theme: \"\",",
+      "  size: \"\",",
+      "  type: null,",
+      "  role: null,",
+      "  href: null,",
+      "  blank: false,",
+      "  attributes: {}",
+      "})"
+    ],
+    "description": ""
+  },
+  "Блочная кнопка": {
+    "prefix": "btn-more",
+    "body": [
+      "+btn-more({",
+      "  className: \"\",",
+      "  text: \"\",",
+      "  disabled: false,",
+      "  theme: null,",
+      "  size: null,",
+      "  type: null,",
+      "  role: null,",
+      "  href: null,",
+      "  blank: false,",
+      "})"
+    ],
+    "description": ""
+  },
+  "Форма": {
+    "prefix": "form",
+    "body": [
+      "+form({",
+      "  className: \"\",",
+      "  action: null,",
+      "  name: \"\",",
+      "  method: \"POST\",",
+      "  id: \"\"",
+      "})"
+    ],
+    "description": ""
+  }
+}

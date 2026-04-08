@@ -1,0 +1,29 @@
+.js-accordion {
+  [data-role="content"] {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s var(--bezier);
+
+    & > div {
+      overflow: hidden;
+    }
+  }
+
+  &._show [data-role="content"] {
+    grid-template-rows: 1fr;
+  }
+
+  &[data-breakpoint="sm"] {
+    @media (min-width: ($sm + 1px)) {
+      [data-role="expand"] {
+        display: none;
+      }
+    }
+
+    @media (min-width: ($sm + 1px)) {
+      [data-role="content"] {
+        grid-template-rows: 1fr;
+      }
+    }
+  }
+}
