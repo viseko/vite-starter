@@ -1,0 +1,49 @@
+$_breakpoints: (
+  // 'xs': $xs,
+  'sm': $sm,
+  'md': $md,
+  'lg': $lg,
+  'xl': $xl
+);
+
+$paddings: (
+  'p': padding,
+  'px': (padding-left, padding-right),
+  'py': (padding-top, padding-bottom),
+  'pb': padding-bottom,
+  'pt': padding-top,
+  'pr': padding-right,
+  'pl': padding-left,
+);
+
+@each $padding, $properties in $paddings {
+  @for $i from 0 through 16 {
+    @if type-of($properties) == list {
+      .#{$padding}-#{$i} {
+        @each $property in $properties {
+          #{$property}: #{$i}rem;
+        }
+      }
+    } @else {
+      .#{$padding}-#{$i} {
+        #{$properties}: #{$i}rem;
+      }
+    }
+
+    @each $breakpoint, $value in $_breakpoints {
+      @media (max-width: #{$value}) {
+        @if type-of($properties) == list {
+          .#{$padding}-#{$breakpoint}-#{$i} {
+            @each $property in $properties {
+              #{$property}: #{$i}rem;
+            }
+          }
+        } @else {
+          .#{$padding}-#{$breakpoint}-#{$i} {
+            #{$properties}: #{$i}rem;
+          }
+        }
+      }
+    }
+  }
+}

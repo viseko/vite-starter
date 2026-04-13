@@ -1,10 +1,27 @@
-@import "layers";
+@layer tokens, base, vendor, components, utils, crutches;
+
 @import "variables";
 @import "mixins";
-@import "base";
-@import "vendor";
-@import "animations";
-@import "typography";
-@import "layout";
-@import "utils";
-@import "crutches";
+
+@layer tokens {
+  @import "tokens";
+  @import "animations";
+}
+
+@layer base {
+  @import "base";
+  @import "layout";
+  @import "typography";
+}
+
+@layer vendor {
+  @import "vendor";
+}
+
+@layer utils {
+  @import "utils";
+}
+
+@layer crutches {
+  @import "crutches";
+}

@@ -79,9 +79,9 @@ function buildPugInclude(fromIndexFile, targetIndexPugFile) {
 }
 
 function buildScssImport(fromIndexFile, targetIndexScssFile) {
-  // @import "<relative-to-index-dir>/<component>";  (без /index.scss)
+  // @import "<relative-to-index-dir>/<component>";  (без /_index.scss)
   const rel = toPosix(path.relative(path.dirname(fromIndexFile), targetIndexScssFile));
-  const withoutIndex = rel.replace(/\/index\.scss$/i, "");
+  const withoutIndex = rel.replace(/\/_index\.scss$/i, "");
   return `@import "${ensureDotSlash(withoutIndex)}";`;
 }
 
@@ -171,8 +171,8 @@ function updateImports() {
       const pugIndex = path.join(dir, "_index.pug");
       ensureFileExists(pugIndex);
 
-      // 2) index.scss НЕ создаём — синхронизируем только если он существует
-      const scssIndex = path.join(dir, "index.scss");
+      // 2) _index.scss НЕ создаём — синхронизируем только если он существует
+      const scssIndex = path.join(dir, "_index.scss");
       const hasScssIndex = fs.existsSync(scssIndex);
 
       // 3) Импорты детей в текущий index.*
@@ -185,9 +185,9 @@ function updateImports() {
         if (fs.existsSync(childPugIndex)) {
           want(desiredPugImportsByFile, pugIndex, buildPugInclude(pugIndex, childPugIndex));
         }
-        // SCSS: только если у текущей директории есть index.scss и у ребёнка есть index.scss
+        // SCSS: только если у текущей директории есть _index.scss и у ребёнка есть _index.scss
         if (hasScssIndex) {
-          const childScssIndex = path.join(childDir, "index.scss");
+          const childScssIndex = path.join(childDir, "_index.scss");
           if (fs.existsSync(childScssIndex)) {
             want(desiredScssImportsByFile, scssIndex, buildScssImport(scssIndex, childScssIndex));
           }
@@ -217,8 +217,8 @@ function updateImports() {
         want(desiredPugImportsByFile, parentPugIndex, buildPugInclude(parentPugIndex, childPugIndex));
       }
 
-      const parentScssIndex = path.join(parentDir, "index.scss");
-      const childScssIndex = path.join(dir, "index.scss");
+      const parentScssIndex = path.join(parentDir, "_index.scss");
+      const childScssIndex = path.join(dir, "_index.scss");
 
       // SCSS: не создаём файлы — только если оба существуют
       if (fs.existsSync(parentScssIndex) && fs.existsSync(childScssIndex)) {

@@ -1,0 +1,49 @@
+$_breakpoints: (
+  // 'xs': $xs,
+  'sm': $sm,
+  'md': $md,
+  'lg': $lg,
+  'xl': $xl,
+  'xxl': $xxl,
+);
+
+$class-prefixes: (
+  'colspan': grid-column,
+  'rowspan': grid-row
+);
+
+[class*="grid-"] {
+  display: grid;
+}
+
+// Генерация классов для grid-template-columns
+@for $i from 1 through 6 {
+  .grid-#{$i} {
+    grid-template-columns: repeat(#{$i}, 1fr);
+  }
+
+  @each $breakpoint-name, $breakpoint-value in $_breakpoints {
+    @media (max-width: #{$breakpoint-value}) {
+      .grid-#{$breakpoint-name}-#{$i} {
+        grid-template-columns: repeat(#{$i}, 1fr);
+      }
+    }
+  }
+}
+
+// Генерация классов для grid-column и grid-row
+@each $class-prefix, $property in $class-prefixes {
+  @for $i from 1 through 5 {
+    .#{$class-prefix}-#{$i} {
+      #{$property}: span #{$i};
+    }
+
+    @each $breakpoint-name, $breakpoint-value in $_breakpoints {
+      @media (max-width: #{$breakpoint-value}) {
+        .#{$class-prefix}-#{$breakpoint-name}-#{$i} {
+          #{$property}: span #{$i};
+        }
+      }
+    }
+  }
+}

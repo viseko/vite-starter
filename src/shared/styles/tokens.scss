@@ -1,0 +1,52 @@
+// CSS-переменные
+:root {
+  // * модульная сетка
+  --step: 8px; // Единица модульной сетки
+  --indent-width: 24px; // Расстояние между колонками
+  --column-count: 12; // Количество колонок
+  --column-width: calc((var(--container-width) - (var(--column-count) - 1) * var(--indent-width)) / var(--column-count)); // Ширина колонки
+
+  // * контейнер
+  --container-width: 1280px; // Макс. ширина контейнера
+  --min-width: 320px; // Мин. ширина страницы
+  --container-padding: 80px; // Отступы контейнера
+  --section-indent: clamp(56px, 10vw, 128px); // Межсекционное расстояние
+
+  // * типографика
+  --font-family: "Inter", helvetica, sans-serif;
+  --font-weight: 400; // Жирность текста
+  --font-size: 16px;
+  --line-height: 150%;
+  --paragraph-spacing: 16px;
+
+  // * 
+
+  // * цвет и декорации
+  --color: #{map-get($colors, black)};
+  --bg-color: #{map-get($colors, white)}; // Фон. цвет страницы
+  --bg-overlay: #{rgba(#000, 40%)};
+  --blur-overlay: blur(15px);
+
+  // * анимации и переходы
+  --bezier: cubic-bezier(0, 0, 0.4, 1); // станд. функция перехода
+
+  @media (max-width: $xl) {
+    --container-padding: 32px;
+  }
+
+  @media (max-width: $lg) {
+    --container-padding: 40px;
+  }
+
+  @media (max-width: $md) {
+    --container-padding: 16px;
+  }
+
+  @media (max-width: $sm) {
+    // * модульная сетка
+    --column-count: 4;
+    --indent-width: 16px;
+    --font-size: 15px;
+    --line-height: 145%;
+  }
+}

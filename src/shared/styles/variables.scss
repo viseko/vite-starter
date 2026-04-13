@@ -11,9 +11,6 @@ $colors: (
   error: #B81417,
 );
 
-// Шрифты
-$font-default: "Inter", helvetica, sans-serif; 
-
 // Контрольные точки
 $xxs: 359px;
 $xs: 400px;
@@ -22,58 +19,3 @@ $md: 768px;
 $lg: 992px; // tablet
 $xl: 1200px; // desktop
 $xxl: 1400px;
-
-// Размеры сетки
-$step: 8px; // Единица модульной сетки
-$column-count: 12; // Количество колонок
-$column-count-mobile: 4;
-$indent-width: 24px; // Отступ между колонками
-$indent-width-mobile: 16px; // Отступ между колонками (мобилка)
-
-// CSS-переменные
-:root {
-  --step: #{$step}; 
-  --indent-width: #{$indent-width}; 
-  --column-count: #{$column-count};
-  --column-width: calc((var(--container-width) - (var(--column-count) - 1) * var(--indent-width)) / var(--column-count));
-
-  // * контейнер
-  --container-width: 1280px; // Макс. ширина контейнера
-  --min-width: 320px; // Мин. ширина контейнера
-  --container-padding: 80px; // Отступы контейнера
-  --section-indent: clamp(56px, 10vw, 128px); // Межсекционное расстояние
-
-  // * текст
-  --font-family: #{$font-default};
-  --font-weight: 400; // Жирность текста
-  --font-size: 16px;
-  --line-height: 150%;
-  
-  // * цвет и декорации
-  --color: #{map-get($colors, black)};
-  --bg-color: #{map-get($colors, white)}; // Фон. цвет страницы
-  --bg-overlay: #{rgba(#000, 40%)};
-  --blur-overlay: blur(15px);
-
-  // * анимации и переходы
-  --bezier: cubic-bezier(0, 0, 0.4, 1); // станд. функция перехода
-
-  @media (max-width: $xl) {
-    --container-padding: 32px;
-  }
-
-  @media (max-width: $lg) {
-    --container-padding: 40px;
-  }
-
-  @media (max-width: $md) {
-    --container-padding: 16px;
-  }
-
-  @media (max-width: $sm) {
-    --column-count: #{$column-count-mobile};
-    --indent-width: #{$indent-width-mobile};
-    --font-size: 15px;
-    --line-height: 145%;
-  }
-}

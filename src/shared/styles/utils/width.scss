@@ -1,0 +1,53 @@
+.w-full {
+  width: 100%;
+}
+
+.w-sm-full {
+  @media (max-width: $sm) {
+    width: 100%;
+  }
+}
+
+.max-w-full {
+  max-width: 100%;
+}
+
+.max-w-lg-full {
+  @media (max-width: $lg) {
+    max-width: 100%;
+  }
+}
+
+.w-lg-full {
+  @media (max-width: $lg) {
+    width: 100%;
+  }
+}
+
+.w-xl-full[class] {
+  @media (max-width: $xl) {
+    width: 100%;
+  }
+}
+
+.max-w-xl-full {
+  @media (max-width: $xl) {
+    max-width: 100%;
+  }
+}
+
+.max-w-xxl-full {
+  @media (max-width: $xxl) {
+    max-width: 100%;
+  }
+}
+
+@for $i from 1 through 12 {
+  .w-#{$i} {
+    width: calc(var(--column-width) * #{$i} + var(--indent-width) * (#{$i} - 1));
+  }
+
+  .max-w-#{$i} {
+    max-width: calc(var(--column-width) * #{$i} + var(--indent-width) * (#{$i} - 1));
+  }
+}

@@ -1,0 +1,49 @@
+$_breakpoints: (
+  // 'xs': $xs,
+  'sm': $sm,
+  'md': $md,
+  'lg': $lg,
+  // 'xl': $xl
+);
+
+.gap-4px {
+  gap: 4px;
+}
+
+@for $i from 1 through 11 {
+  .gap-#{$i}[class] {
+    gap: #{$i}rem;
+  }
+  .gap-y-#{$i}[class] {
+    row-gap: #{$i}rem;
+  }
+  .gap-x-#{$i}[class] {
+    column-gap: #{$i}rem;
+  }
+
+  @each $breakpoint, $value in $_breakpoints {
+    @media (max-width: #{$value}) {
+      .gap-#{$breakpoint}-#{$i}[class] {
+        gap: #{$i}rem;
+      }
+      .gap-y-#{$breakpoint}-#{$i}[class] {
+        row-gap: #{$i}rem;
+      }
+      .gap-x-#{$breakpoint}-#{$i}[class] {
+        column-gap: #{$i}rem;
+      }
+    }
+  }
+}
+
+.gap-y-lg-3[class] {
+  @media (max-width: $lg) {
+    gap: 3rem;
+  }
+}
+
+.gap-sm-4px[class] {
+  @media (max-width: $sm) {
+    gap: 4px;
+  }
+}

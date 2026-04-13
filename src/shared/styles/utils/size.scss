@@ -1,0 +1,54 @@
+.size-3 {
+  width: 3rem;
+  height: 3rem;
+}
+
+.size-4 {
+  width: 4rem;
+  height: 4rem;
+}
+
+.size-5 {
+  width: 5rem;
+  height: 5rem;
+}
+
+.size-7 {
+  width: 7rem;
+  height: 7rem;
+}
+
+.size-sm-2 {
+  @media (max-width: $sm) {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.size-sm-3 {
+  @media (max-width: $sm) {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.size-sm-5 {
+  @media (max-width: $sm) {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+.size-sm-6 {
+  @media (max-width: $sm) {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+.size-sm-12px {
+  @media (max-width: $sm) {
+    width: 12px;
+    height: 12px;
+  }
+}

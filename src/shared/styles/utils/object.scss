@@ -1,0 +1,14 @@
+.object-cover,
+.object-contain {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.object-contain {
+  object-fit: contain;
+}

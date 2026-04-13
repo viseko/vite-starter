@@ -1,0 +1,8 @@
+mixin page-footer(data={})
+  .page-footer(
+    class=data.className,
+    class=(data.theme ? `page-footer--theme--${data.theme}` : null),
+    class=(data.size ? `page-footer--size--${data.size}` : null),
+    data-role=data.role,
+  ) page-footer
+  

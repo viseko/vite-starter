@@ -1,0 +1,30 @@
+$_breakpoints: (
+  'xs': $xs,
+  'sm': $sm,
+  'md': $md,
+  'lg': $lg,
+  'xl': $xl,
+  'xxl': $xxl,
+);
+
+$_displays: (
+  'none': none,
+  'flex': flex,
+  'block': block,
+  'inline': inline,
+  'inline-block': inline-block
+);
+
+@each $display-name, $display-value in $_displays {
+  .d-#{$display-name}[class] {
+    display: $display-value;
+  }
+
+  @each $breakpoint-name, $breakpoint-value in $_breakpoints {
+    .d-#{$breakpoint-name}-#{$display-name}[class] {
+      @media (max-width: #{$breakpoint-value}) {
+        display: $display-value;
+      }
+    }
+  }
+}

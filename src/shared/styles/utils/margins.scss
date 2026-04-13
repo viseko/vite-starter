@@ -1,0 +1,73 @@
+$_breakpoints: (
+  // 'xs': $xs,
+  'sm': $sm,
+  'md': $md,
+  // 'lg': $lg,
+  'xl': $xl
+);
+
+$margins: (
+  'm': margin,
+  'mx': (margin-left, margin-right),
+  'my': (margin-top, margin-bottom),
+  'mb': margin-bottom,
+  'mt': margin-top
+);
+
+
+@each $margin, $properties in $margins {
+  @for $i from 0 through 14 {
+    @if type-of($properties) == list {
+      .#{$margin}-#{$i} {
+        @each $property in $properties {
+          #{$property}: #{$i}rem;
+        }
+      }
+    } @else {
+      .#{$margin}-#{$i} {
+        #{$properties}: #{$i}rem;
+      }
+    }
+
+    @each $breakpoint, $value in $_breakpoints {
+      @media (max-width: #{$value}) {
+        @if type-of($properties) == list {
+          .#{$margin}-#{$breakpoint}-#{$i} {
+            @each $property in $properties {
+              #{$property}: #{$i}rem;
+            }
+          }
+        } @else {
+          .#{$margin}-#{$breakpoint}-#{$i} {
+            #{$properties}: #{$i}rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+
+.mx-sm-container {
+  @media (max-width: $sm) {
+    margin-left: calc(var(--container-padding) * -1);
+    margin-right: calc(var(--container-padding) * -1);
+  }
+}
+
+.mx-sm--2 {
+  @media (max-width: $sm) {
+    width: calc(100% + 4rem);
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+}
+
+.mb-sm--2 {
+  @media (max-width: $sm) {
+    margin-bottom: -2rem;
+  }
+}
