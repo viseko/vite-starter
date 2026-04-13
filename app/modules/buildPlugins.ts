@@ -1,5 +1,6 @@
 import { viteConvertPugInHtml } from '@mish.dev/vite-convert-pug-in-html';
 
+
 export interface PluginsOptions {
   locals: Record<string, any>,
 }

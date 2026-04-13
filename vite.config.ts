@@ -55,6 +55,24 @@ export default defineConfig(({ mode }) => {
               ? `assets/css/main.min[extname]`
               : 'assets/[name][extname]',
         },
+        plugins: [
+          {
+            name: 'fix-css-font-paths',
+            generateBundle(_options, bundle) {
+              for (const fileName in bundle) {
+                const chunk = bundle[fileName];
+                if (chunk.type === 'asset' && fileName.endsWith('.css')) {
+                  if (typeof chunk.source === 'string') {
+                    chunk.source = chunk.source.replace(
+                      /url\(assets\//g,
+                      'url(../assets/'
+                    );
+                  }
+                }
+              }
+            },
+          },
+        ],
       },
     },
     css: {
