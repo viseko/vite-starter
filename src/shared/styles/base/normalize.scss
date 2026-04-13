@@ -35,6 +35,8 @@
     font-family: var(--font-family);
     line-height: var(--line-height);
     // letter-spacing: 0.078em; // Фикс разницы межбуквицы с фигмой
+
+    @include custom-scrollbar(map-get($colors, primary), #fff, 8px, 4px, 2px);
   }
 
   hr {

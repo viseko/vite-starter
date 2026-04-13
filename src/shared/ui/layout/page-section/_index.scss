@@ -36,4 +36,12 @@
   &--fill:has(+ .page-section--fill) {
     padding-bottom: calc(var(--section-indent) / 2);
   }
+
+  &:first-child {
+    padding-top: var(--section-padding-first);
+  }
+
+  &:last-child {
+    padding-top: var(--section-padding-last);
+  }
 }

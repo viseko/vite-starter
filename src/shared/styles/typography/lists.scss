@@ -1,4 +1,9 @@
 ul,
 ol {
   @include reset-list;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--list-spacing);
+  margin: var(--list-margin);
 }

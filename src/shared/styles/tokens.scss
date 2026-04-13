@@ -10,16 +10,28 @@
   --container-width: 1280px; // Макс. ширина контейнера
   --min-width: 320px; // Мин. ширина страницы
   --container-padding: 80px; // Отступы контейнера
+
+  // * секции
   --section-indent: clamp(56px, 10vw, 128px); // Межсекционное расстояние
+  --section-padding-first: 40px; // Отступ первой секции
+  --section-padding-last: 40px; // Отступ последней секции
 
   // * типографика
   --font-family: "Inter", helvetica, sans-serif;
-  --font-weight: 400; // Жирность текста
+  --font-weight: 400;
   --font-size: 16px;
   --line-height: 150%;
   --paragraph-spacing: 16px;
-
-  // * 
+  --heading-weight: 700;
+  --heading-line-height: 135%;
+  --h1-margin: 64px 0 40px;
+  --h1-size: clamp(24px, 3vw, 40px);
+  --h2-margin: 40px 0 32px;
+  --h2-size: clamp(20px, 2vw, 32px);
+  --h3-margin: 40px 0 24px;
+  --h3-size: clamp(18px, 1vw, 24px);
+  --list-spacing: 0px;
+  --list-margin: 0px;
 
   // * цвет и декорации
   --color: #{map-get($colors, black)};

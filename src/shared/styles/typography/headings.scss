@@ -1,0 +1,32 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--heading-line-height);
+  font-weight: var(--heading-weight);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+h1 {
+  font-size: var(--h1-size);
+  margin: var(--h1-margin);
+}
+
+h2 {
+  font-size: var(--h2-size);
+  margin: var(--h2-margin);
+}
+
+h3 {
+  font-size: var(--h3-size);
+  margin: var(--h3-margin);
+}

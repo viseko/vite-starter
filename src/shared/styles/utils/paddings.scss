@@ -47,3 +47,29 @@ $paddings: (
     }
   }
 }
+
+.pt-indent {
+  padding-top: var(--section-indent);
+}
+
+.pb-indent {
+  padding-bottom: var(--section-indent);
+}
+
+.py-indent {
+  padding-top: var(--section-indent);
+  padding-bottom: var(--section-indent);
+}
+
+.pt-indent-half {
+  padding-top: calc(var(--section-indent) / 2);
+}
+
+.pb-indent-half {
+  padding-bottom: calc(var(--section-indent) / 2);
+}
+
+.py-indent-half {
+  padding-top: calc(var(--section-indent) / 2);
+  padding-bottom: calc(var(--section-indent) / 2);
+}
