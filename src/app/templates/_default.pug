@@ -27,11 +27,10 @@ html(lang="ru")
     link(rel='preload' href=`${PATH.fonts}/inter-variable.woff2` as='font' type='font/woff2' crossorigin)
 
     //- Стили
-    link(rel="stylesheet", href=`/main.scss`)
-    //- if (IS_DEV)
-    //-   link(rel="stylesheet", href=`/main.scss`)
-    //- else 
-    //-   link(rel="stylesheet", href=`${BASE_URL}/assets/css/main.min.css?v=${TIMESTAMP}`)
+    if (IS_DEV)
+      link(rel="stylesheet", href=`/main.scss`)
+    else
+      link(rel="stylesheet", href=`${BASE_URL}/assets/css/main.min.css?v=${TIMESTAMP}`)
 
     //- Фавиконки и манифест
     link(rel='icon' type='image/png' href=`${BASE_URL}/favicon-96x96.png` sizes='96x96')
