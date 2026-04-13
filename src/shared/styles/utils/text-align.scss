@@ -1,0 +1,33 @@
+.align-center[class] {
+  text-align: center;
+}
+
+.align-right[class] {
+  text-align: right;
+}
+
+.align-left[class] {
+  text-align: left;
+}
+
+.align-sm-left[class] {
+  @media (max-width: $sm) {
+    text-align: left;
+  }
+}
+
+.valign-middle {
+  vertical-align: middle;
+}
+
+.valign-top {
+  vertical-align: top;
+}
+
+.valign-bottom {
+  vertical-align: bottom;
+}
+
+.valign-baseline {
+  vertical-align: baseline;
+}

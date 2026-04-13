@@ -1,0 +1,8 @@
+mixin footer-dev(data={})
+  .footer-dev(
+    class=data.className,
+    class=(data.theme ? `footer-dev--theme--${data.theme}` : null),
+    class=(data.size ? `footer-dev--size--${data.size}` : null),
+    data-role=data.role,
+  ) footer-dev
+  
