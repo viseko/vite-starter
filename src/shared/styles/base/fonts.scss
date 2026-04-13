@@ -1,11 +1,9 @@
-@layer base {
-  // @include font-face("Roboto", "Roboto-400", 400);
+// @include font-face("Roboto", "Roboto-400", 400);
 
-  @font-face {
-    font-weight: 300 400 500 600 700 800;
-    font-style: normal;
-    font-family: "Inter";
-    src: url("@/assets/fonts/inter-variable.woff2") format("woff2");
-    font-display: swap;
-  }
+@font-face {
+  font-weight: 300 400 500 600 700 800;
+  font-style: normal;
+  font-family: "Inter";
+  src: url("@/assets/fonts/inter-variable.woff2") format("woff2");
+  font-display: swap;
 }
