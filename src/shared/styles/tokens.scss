@@ -9,27 +9,27 @@
   // * контейнер
   --container-width: 1280px; // Макс. ширина контейнера
   --min-width: 320px; // Мин. ширина страницы
-  --container-padding: 80px; // Отступы контейнера
+  --container-padding: #{fluid(16, 80)}; // Отступы контейнера
 
   // * секции
-  --section-indent: clamp(56px, 10vw, 128px); // Межсекционное расстояние
+  --section-indent: #{fluid(56, 128)}; // Межсекционное расстояние
   --section-padding-first: 40px; // Отступ первой секции
   --section-padding-last: 40px; // Отступ последней секции
 
   // * типографика
   --font-family: "Inter", helvetica, sans-serif;
   --font-weight: 400;
-  --font-size: 16px;
+  --font-size: #{fluid(16, 18)};
   --line-height: 150%;
   --paragraph-spacing: 16px;
   --heading-weight: 700;
   --heading-line-height: 135%;
-  --h1-margin: 64px 0 40px;
-  --h1-size: clamp(24px, 3vw, 40px);
-  --h2-margin: 40px 0 32px;
-  --h2-size: clamp(20px, 2vw, 32px);
-  --h3-margin: 40px 0 24px;
-  --h3-size: clamp(18px, 1vw, 24px);
+  --h1-margin: #{fluid(32, 64)} 0 #{fluid(24, 40)};
+  --h1-size: #{fluid(24, 40)};
+  --h2-margin: #{fluid(24, 40)} 0 #{fluid(15, 32)};
+  --h2-size: #{fluid(20, 32)};
+  --h3-margin: #{fluid(24, 40)} 0 #{fluid(16, 24)};
+  --h3-size: #{fluid(18, 24)};
   --list-spacing: 0px;
   --list-margin: 0px;
 
@@ -42,23 +42,12 @@
   // * анимации и переходы
   --bezier: cubic-bezier(0, 0, 0.4, 1); // станд. функция перехода
 
-  @media (max-width: $xl) {
-    --container-padding: 32px;
-  }
-
-  @media (max-width: $lg) {
-    --container-padding: 40px;
-  }
-
-  @media (max-width: $md) {
-    --container-padding: 16px;
-  }
-
   @media (max-width: $sm) {
     // * модульная сетка
     --column-count: 4;
     --indent-width: 16px;
-    --font-size: 15px;
+
+    // * типографика
     --line-height: 145%;
   }
 }
