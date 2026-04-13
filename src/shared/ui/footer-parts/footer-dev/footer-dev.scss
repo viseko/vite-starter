@@ -1,4 +1,14 @@
 .footer-dev {
-  padding: 8px;
-  border: 2px dashed red;
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+
+  &__title {
+    color: inherit;
+  }
+
+  &__link {
+    color: map-get($colors, white);
+    font-weight: 500;
+  }
 }

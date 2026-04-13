@@ -1,0 +1,10 @@
+mixin footer-copy(data={})
+  - var year = new Date().getFullYear()
+  - var projectName = "Pug Starter"
+
+  .footer-copy(
+    class=data.className,
+    class=(data.theme ? `footer-copy--theme--${data.theme}` : null),
+    class=(data.size ? `footer-copy--size--${data.size}` : null),
+    data-role=data.role,
+  ) &copy;&nbsp;#{year}. #{projectName}
