@@ -10,7 +10,25 @@
     padding-bottom: calc(var(--section-indent) / 2);
   }
 
-  // Стык "серый-серый": режем до 0.5 с обеих сторон
+  // Стык белая + цвет
+  &:not(.page-section--fill):has(+ .page-section--fill) {
+    padding-bottom: var(--section-indent);
+  }
+
+  &:not(.page-section--fill) + .page-section--fill {
+    padding-top: var(--section-indent);
+  }
+
+  // Стык цвет + белая
+  &--fill + &:not(.page-section--fill) {
+    padding-top: var(--section-indent);
+  }
+
+  &--fill:has(+ .page-section:not(.page-section--fill)) {
+    padding-bottom: var(--section-indent);
+  }
+
+  // Стык цвет + цвет
   &--fill + &--fill {
     padding-top: calc(var(--section-indent) / 2);
   }
