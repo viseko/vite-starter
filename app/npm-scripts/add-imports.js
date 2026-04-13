@@ -167,26 +167,52 @@ function updateImports() {
     const rootAbs = path.resolve(rootDir);
 
     walkDirs(rootDir, (dir) => {
-      // 1) Гарантируем _index.pug в каждой директории
-      const pugIndex = path.join(dir, "_index.pug");
-      ensureFileExists(pugIndex);
-
-      // 2) _index.scss НЕ создаём — синхронизируем только если он существует
-      const scssIndex = path.join(dir, "_index.scss");
-      const hasScssIndex = fs.existsSync(scssIndex);
-
-      // 3) Импорты детей в текущий index.*
+      // 1) Проверяем детей
       const children = listSubdirs(dir);
 
+      // 2) Определяем, нужны ли _index файлы (только если есть дети с соответствующими _index)
+      let hasPugChildren = false;
+      let hasScssChildren = false;
+      
+      for (const childName of children) {
+        const childDir = path.join(dir, childName);
+        
+        const childPugIndex = path.join(childDir, "_index.pug");
+        if (fs.existsSync(childPugIndex)) {
+          hasPugChildren = true;
+        }
+        
+        const childScssIndex = path.join(childDir, "_index.scss");
+        if (fs.existsSync(childScssIndex)) {
+          hasScssChildren = true;
+        }
+        
+        if (hasPugChildren && hasScssChildren) break;
+      }
+
+      // 3) Создаём _index файлы только если есть дети
+      const pugIndex = path.join(dir, "_index.pug");
+      if (hasPugChildren) {
+        ensureFileExists(pugIndex);
+      }
+
+      const scssIndex = path.join(dir, "_index.scss");
+      if (hasScssChildren) {
+        ensureFileExists(scssIndex);
+      }
+
+      // 4) Импорты детей в текущий index.*
       for (const childName of children) {
         const childDir = path.join(dir, childName);
 
-        const childPugIndex = path.join(childDir, "_index.pug");
-        if (fs.existsSync(childPugIndex)) {
-          want(desiredPugImportsByFile, pugIndex, buildPugInclude(pugIndex, childPugIndex));
+        if (hasPugChildren) {
+          const childPugIndex = path.join(childDir, "_index.pug");
+          if (fs.existsSync(childPugIndex)) {
+            want(desiredPugImportsByFile, pugIndex, buildPugInclude(pugIndex, childPugIndex));
+          }
         }
-        // SCSS: только если у текущей директории есть _index.scss и у ребёнка есть _index.scss
-        if (hasScssIndex) {
+        
+        if (hasScssChildren) {
           const childScssIndex = path.join(childDir, "_index.scss");
           if (fs.existsSync(childScssIndex)) {
             want(desiredScssImportsByFile, scssIndex, buildScssImport(scssIndex, childScssIndex));
@@ -209,19 +235,17 @@ function updateImports() {
       if (!path.resolve(parentDir).startsWith(rootAbs2)) return;
       if (path.resolve(dir) === rootAbs2) return; // сам root не импортируется в родителя
 
-      const parentPugIndex = path.join(parentDir, "_index.pug");
-      ensureFileExists(parentPugIndex);
-
       const childPugIndex = path.join(dir, "_index.pug");
       if (fs.existsSync(childPugIndex)) {
+        const parentPugIndex = path.join(parentDir, "_index.pug");
+        ensureFileExists(parentPugIndex);
         want(desiredPugImportsByFile, parentPugIndex, buildPugInclude(parentPugIndex, childPugIndex));
       }
 
-      const parentScssIndex = path.join(parentDir, "_index.scss");
       const childScssIndex = path.join(dir, "_index.scss");
-
-      // SCSS: не создаём файлы — только если оба существуют
-      if (fs.existsSync(parentScssIndex) && fs.existsSync(childScssIndex)) {
+      if (fs.existsSync(childScssIndex)) {
+        const parentScssIndex = path.join(parentDir, "_index.scss");
+        ensureFileExists(parentScssIndex);
         want(desiredScssImportsByFile, parentScssIndex, buildScssImport(parentScssIndex, childScssIndex));
       }
     });
