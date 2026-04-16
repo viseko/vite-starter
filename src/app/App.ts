@@ -1,4 +1,7 @@
-type InitFunction<T = any, O = any> = (el: Element, options: O) => T;
+import { createRoot } from 'react-dom/client';
+import type { Root } from "react-dom/client";
+
+type InitFunction<T = any, O = any> = (el: HTMLElement, options: O) => T;
 
 type ElementConstructor<T = any, O = any> = new (el: Element, options: O) => T;
 
@@ -19,6 +22,8 @@ type LoadScriptOptions = {
 
 const initializedElements = new Map<Element, any>();
 
+const reactRoots = new Map<HTMLElement, Root>();
+
 const sizes = {
   xxs: 359,
   xs: 400,
@@ -34,9 +39,12 @@ type MediaSize = keyof typeof sizes;
 interface AppInitOptions {
   force?: boolean,
   ymID?: number,
+  debug?: boolean,
 };
 
 const App = {
+  _debug: false,
+
   _validate<T, O>(selector: string, fn: InitFunction<T, O> | ElementConstructor<T, O>, config: InstallConfig<T> = {}) {
     const { onAdd, onRemove } = config;
     if (typeof selector !== 'string' || !selector) throw new Error('Селектор должен быть непустой строкой');
@@ -45,7 +53,7 @@ const App = {
     if (onRemove && typeof onRemove !== 'function') throw new Error('onRemove должен быть функцией');
   },
 
-  _initElement<T, O>(elem: Element, fn: InitFunction<T, O>, options: O, initializedObjs: T[], onAdd?: (el: Element, instance: T) => void) {
+  _initElement<T, O>(elem: HTMLElement, fn: InitFunction<T, O>, options: O, initializedObjs: T[], onAdd?: (el: HTMLElement, instance: T) => void) {
     try {
       const instance = fn(elem, options);
       initializedElements.set(elem, instance);
@@ -81,7 +89,7 @@ const App = {
 
     const initElements = () => {
       document.querySelectorAll(selector).forEach((elem) => {
-        this._initElement(elem, fn, options, initializedObjs, onAdd);
+        this._initElement(elem as HTMLElement, fn, options, initializedObjs, onAdd);
       });
     };
 
@@ -93,8 +101,8 @@ const App = {
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType !== Node.ELEMENT_NODE) return;
             const element = node as Element;
-            if (element.matches(selector)) this._initElement(element, fn, options, initializedObjs, onAdd);
-            element.querySelectorAll(selector).forEach((el) => this._initElement(el, fn, options, initializedObjs, onAdd));
+            if (element.matches(selector)) this._initElement(element as HTMLElement, fn, options, initializedObjs, onAdd);
+            element.querySelectorAll(selector).forEach((el) => this._initElement(el as HTMLElement, fn, options, initializedObjs, onAdd));
           });
 
           mutation.removedNodes.forEach((node) => {
@@ -166,12 +174,33 @@ const App = {
   },
 
   init(options: AppInitOptions = {}) {
+
     if ((window as any).App && !options.force) {
       console.warn('window.App уже существует. Используйте force=true для перезаписи.');
       return this;
     }
+
     (window as any).App = this;
+
+    this._debug = !!options.debug;
+
     return this;
+  },
+
+  renderJSX(elem: HTMLElement, jsx: React.ReactNode) {
+    let root = reactRoots.get(elem);
+  
+    if (!root) {
+      root = createRoot(elem);
+      reactRoots.set(elem, root);
+    }
+  
+    root.render(jsx);
+  },
+
+  debug(...args: any[]) {
+    if (!this._debug) return;
+    console.log('%c[App]', 'color: #888', ...args);
   },
 };
 
@@ -180,6 +209,7 @@ App.install = App.install.bind(App);
 App.installClass = App.installClass.bind(App);
 App.loadScript = App.loadScript.bind(App);
 App.init = App.init.bind(App);
+App.debug = App.debug.bind(App);
 
 export default App;
-export const { init, install, installClass, loadScript } = App;
+export const { init, install, installClass, loadScript, renderJSX, debug } = App;
