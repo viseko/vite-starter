@@ -1,0 +1,63 @@
+@mixin list-dash(
+  $offset: 24px,
+  $color: map-get($colors, primary),
+  $width: 16px,
+  $height: 2px,
+) {
+  li {
+    position: relative;
+    padding-left: 24px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.7em;
+      width: 16px;
+      height: 2px;
+      background-color: $color;
+    }
+  }
+}
+
+@mixin list-dot {
+
+}
+
+@mixin list-num(
+  $color: inherit,
+  $font-size: inherit,
+  $size: unset,
+  $font-weight: inherit,
+  $bg: unset,
+  $radius: 0,
+  $left: 0,
+  $top: 0,
+  $line-height: inherit,
+  $offset: 24px,
+) {
+  counter-reset: num;
+
+  li {
+    position: relative;
+    counter-increment: num;
+    padding-left: $offset;
+
+    &::before {
+      content: counter(num) ".";
+
+      position: absolute;
+      left: $left;
+      top: $top;
+      width: $size;
+      height: $size;
+      color: $color;
+      font-size: $font-size;
+      font-weight: $font-weight;
+      line-height: $line-height;
+      text-align: center;
+      border-radius: $radius;
+      background-color: $bg;
+    }
+  }
+}

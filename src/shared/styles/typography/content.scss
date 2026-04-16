@@ -13,7 +13,6 @@
   p {
     max-width: var(--paragraph-max-width);
   }
-
   
   ul,
   ol {
@@ -21,11 +20,16 @@
   }
 
   ul {
-    @include list-dash;
+    @include list-dash(
+      
+    );
   }
 
   ol {
-    @include list-num;
+    @include list-num(
+      $color: map-get($colors, primary),
+      $radius: 50%,
+    );
   }
 
   table {
