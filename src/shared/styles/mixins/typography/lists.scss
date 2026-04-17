@@ -1,4 +1,5 @@
 @mixin list-dash(
+  $margin-left: 0,
   $offset: 24px,
   $color: map-get($colors, primary),
   $width: 16px,
@@ -20,8 +21,13 @@
   }
 }
 
-@mixin list-dot {
-
+@mixin list-dot(
+  $offset: 24px,
+  $color: map-get($colors, primary),
+  $width: 16px,
+  $height: 2px,
+) {
+  
 }
 
 @mixin list-num(

@@ -1,6 +1,7 @@
 ul,
 ol {
   @include reset-list;
+  @include trim-margins;
 
   display: flex;
   flex-direction: column;

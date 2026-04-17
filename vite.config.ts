@@ -80,6 +80,8 @@ export default defineConfig(({ mode }) => {
         scss: {
           // Скрываем уведомления об устаревающих функциях
           silenceDeprecations: ['import', 'global-builtin'],
+          // Делаем везде видимыми SCSS-переменные
+          additionalData: `@import "@/shared/styles/variables.scss";`
         },
       },
     },

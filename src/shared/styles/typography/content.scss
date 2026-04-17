@@ -17,12 +17,16 @@
   ul,
   ol {
     max-width: var(--list-max-width);
+
+    ul,
+    ol {
+      margin-top: var(--list-spacing);
+      margin-bottom: 0;
+    }
   }
 
   ul {
-    @include list-dash(
-      
-    );
+    @include list-dash;
   }
 
   ol {
@@ -33,6 +37,14 @@
   }
 
   table {
+    @include table;
+    @include trim-margins;
     margin: var(--table-margin);
+  }
+
+  .table-wrapper {
+    @include wide-container-paddings;
+    
+    overflow: auto;
   }
 }
