@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import tinify from "tinify";
 
-dotenv.config();
+config();
 
 tinify.key = process.env.KEY_TINYPNG;
 
@@ -41,9 +41,7 @@ async function compress(filePath) {
 
   console.log("compress:", relative);
 
-  await tinify
-    .fromFile(filePath)
-    .toFile(outPath);
+  await tinify.fromFile(filePath).toFile(outPath);
 }
 
 async function run() {
