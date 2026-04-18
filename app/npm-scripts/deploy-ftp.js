@@ -23,7 +23,6 @@ function getArgument(arr) {
 
 // Получаем аргумент из командной строки
 const argument = getArgument(process.argv);
-console.log({argv: process.argv});
 const deployType = argument || 'default';
 
 // Получаем конфигурацию для выбранного типа дaеплоя

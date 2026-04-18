@@ -12,7 +12,8 @@
     "ftp": "node ./app/npm-scripts/deploy-ftp.js",
     "ftp:full": "node ./app/npm-scripts/deploy-ftp.js --full",
     "ftp:images": "node ./app/npm-scripts/deploy-ftp.js --images",
-    "ftp:assets": "node ./app/npm-scripts/deploy-ftp.js --assets"
+    "ftp:assets": "node ./app/npm-scripts/deploy-ftp.js --assets",
+    "prepare:sprite": "node ./app/npm-scripts/prepare-svg-sprite.js"
   },
   "author": "Viseko23 <viseko23@gmail.com>",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "ftp-deploy": "^2.4.7",
     "pug": "^3.0.4",
     "sass": "^1.98.0",
+    "svgstore": "^3.0.1",
     "vite": "^7.3.1"
   },
   "dependencies": {
