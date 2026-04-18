@@ -42,18 +42,17 @@
   $line-height: inherit,
   $offset: 24px,
 ) {
-  counter-reset: num;
+  counter-reset: item;
 
   li {
-    position: relative;
-    counter-increment: num;
-    padding-left: $offset;
+    counter-increment: item;
 
     &::before {
-      content: counter(num) ".";
-
-      position: absolute;
-      left: $left;
+      content: counters(item, ".") ".";
+      
+      display: inline-block;
+      min-width: $offset;
+      padding-right: 8px;
       top: $top;
       width: $size;
       height: $size;
@@ -61,9 +60,20 @@
       font-size: $font-size;
       font-weight: $font-weight;
       line-height: $line-height;
-      text-align: center;
+      text-align: left;
       border-radius: $radius;
       background-color: $bg;
     }
+
+    & > ol,
+    & > ul {
+      padding-left: $offset;
+    }
+  }
+
+  /* важно: вложенные списки должны начинать свой уровень */
+  li ul,
+  li ol {
+    counter-reset: item;
   }
 }

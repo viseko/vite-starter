@@ -6,7 +6,7 @@
   --list-spacing: 8px;
   --list-margin: 16px 0;
   --figure-margin: 24px 0;
-  --table-margin: 24px 0;
+  --table-margin: 40px;
 
   font-size: var(--font-size);
   line-height: var(--line-height);
@@ -41,13 +41,15 @@
     @include table;
     @include trim-margins;
     
-    margin: var(--table-margin);
+    margin: var(--table-margin) 0;
   }
 
   .table-wrapper {
     @include wide-container-paddings;
+    @include trim-margins;
 
     overflow: auto;
+    margin-top: var(--table-margin);
   }
 
   figure {

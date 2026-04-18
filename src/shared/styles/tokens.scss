@@ -13,8 +13,8 @@
 
   // * секции
   --section-indent: #{fluid(56, 128)}; // Межсекционное расстояние
-  --section-padding-first: 40px; // Отступ первой секции
-  --section-padding-last: 40px; // Отступ последней секции
+  --section-padding-first: #{fluid(24, 40)}; // Отступ первой секции
+  --section-padding-last: #{fluid(56, 128)}; // Отступ последней секции
 
   // * типографика
   --font-family: "Inter", helvetica, sans-serif;
