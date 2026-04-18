@@ -5,6 +5,7 @@
   // --line-height: 150%;
   --list-spacing: 8px;
   --list-margin: 16px 0;
+  --figure-margin: 24px 0;
   --table-margin: 24px 0;
 
   font-size: var(--font-size);
@@ -39,12 +40,19 @@
   table {
     @include table;
     @include trim-margins;
+    
     margin: var(--table-margin);
   }
 
   .table-wrapper {
     @include wide-container-paddings;
-    
+
     overflow: auto;
+  }
+
+  figure {
+    @include trim-margins;
+
+    margin: var(--figure-margin) 0;
   }
 }

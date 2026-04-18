@@ -7,7 +7,7 @@ import {
   buildPlugins
 } from "./app/modules/_index";
 
-const PROJECT_NAME = "my_proj";
+const PROJECT_NAME = "vite-starter";
 
 export default defineConfig(({ mode }) => {
   const IS_DEV = (mode === 'development');

@@ -86,11 +86,10 @@
 @mixin table-basic(
   $border-color: map-get($colors, stroke),
 ) {
-  @include content-table(
+  @include table(
     $border-color: $border-color,
     $striped: false,
     $hover: false,
-    $responsive: true,
   );
 }
 
@@ -99,12 +98,11 @@
   $border-color: map-get($colors, stroke),
   $stripe-color: rgba(#000, 0.02),
 ) {
-  @include content-table(
+  @include table(
     $border-color: $border-color,
     $bg-stripe: $stripe-color,
     $striped: true,
     $hover: true,
-    $responsive: true,
   );
 }
 
@@ -112,11 +110,10 @@
 @mixin table-compact(
   $border-color: map-get($colors, stroke),
 ) {
-  @include content-table(
+  @include table(
     $border-color: $border-color,
     $cell-padding-y: 8px,
     $cell-padding-x: 12px,
-    $responsive: true,
   );
 }
 
