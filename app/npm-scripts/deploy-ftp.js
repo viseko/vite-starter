@@ -50,14 +50,14 @@ const config_ftp = {
   localRoot: join(__dirname, '../../build'),
   remoteRoot: process.env.FTP_PATH,
   include: deploySettings.include,
-  exclude: deploySettings.exclude,
+  exclude: deploySettings.exclude || [],
   deleteRemote: false,
   forcePasv: true,
   sftp: false,
 };
 
 console.log(`\n🚀 Начинаем загрузку (тип: ${deployType})...`);
-console.log(`📁 Локальная папка: ${config_ftp.localRoot}`);
+console.log(`📁 <Локальная папка>: ${config_ftp.localRoot}`);
 console.log(`🌐 Удаленная папка: ${config_ftp.remoteRoot}`);
 
 ftpDeploy
