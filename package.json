@@ -20,6 +20,10 @@
     "validate:html": "html-validate \"./build/**/*.html\"",
     "lint:scss": "stylelint \"src/**/*.scss\"",
     "lint:scss:fix": "stylelint \"src/**/*.scss\" --fix",
+    "lint:ts": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint:ts:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
+    "lint": "npm run lint:scss && npm run lint:ts",
+    "lint:fix": "npm run lint:scss:fix && npm run lint:ts:fix",
     "format": "prettier --write \"src/**/*.{scss,ts,js,json}\"",
     "format:check": "prettier --check \"src/**/*.{scss,ts,js,json}\""
   },
@@ -31,6 +35,8 @@
     "@types/react-dom": "^19.2.3",
     "chalk": "^5.6.2",
     "dotenv": "^16.6.1",
+    "eslint": "^9.7.0",
+    "eslint-config-prettier": "^10.1.8",
     "fonteditor-core": "^2.6.3",
     "ftp-deploy": "^2.4.3",
     "html-validate": "^10.9.0",
@@ -47,6 +53,7 @@
     "svgstore": "^3.0.1",
     "tinify": "^1.8.2",
     "ttf2woff2": "^8.0.1",
+    "typescript-eslint": "^8.58.2",
     "vite": "^7.3.1"
   },
   "dependencies": {

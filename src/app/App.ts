@@ -1,24 +1,24 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 
 type InitFunction<T = any, O = any> = (el: HTMLElement, options: O) => T;
 
 type ElementConstructor<T = any, O = any> = new (el: Element, options: O) => T;
 
-type InstallConfig<T = any> = {
+interface InstallConfig<T = any> {
   observe?: boolean;
   onAdd?: (el: Element, instance: T) => void;
   onRemove?: (el: Element, instance: T) => void;
-};
+}
 
-type LoadScriptOptions = {
+interface LoadScriptOptions {
   path: string;
   onload?: () => void;
   onerror?: () => void;
   async?: boolean;
   defer?: boolean;
   attributes?: Record<string, string>;
-};
+}
 
 const initializedElements = new Map<Element, any>();
 
@@ -37,23 +37,35 @@ const sizes = {
 type MediaSize = keyof typeof sizes;
 
 interface AppInitOptions {
-  force?: boolean,
-  ymID?: number,
-  debug?: boolean,
-};
+  force?: boolean;
+  ymID?: number;
+  debug?: boolean;
+}
 
 const App = {
   _debug: false,
 
-  _validate<T, O>(selector: string, fn: InitFunction<T, O> | ElementConstructor<T, O>, config: InstallConfig<T> = {}) {
+  _validate<T, O>(
+    selector: string,
+    fn: InitFunction<T, O> | ElementConstructor<T, O>,
+    config: InstallConfig<T> = {}
+  ) {
     const { onAdd, onRemove } = config;
-    if (typeof selector !== 'string' || !selector) throw new Error('Селектор должен быть непустой строкой');
-    if (typeof fn !== 'function') throw new Error('Необходимо передать функцию');
-    if (onAdd && typeof onAdd !== 'function') throw new Error('onAdd должен быть функцией');
-    if (onRemove && typeof onRemove !== 'function') throw new Error('onRemove должен быть функцией');
+    if (typeof selector !== "string" || !selector)
+      throw new Error("Селектор должен быть непустой строкой");
+    if (typeof fn !== "function") throw new Error("Необходимо передать функцию");
+    if (onAdd && typeof onAdd !== "function") throw new Error("onAdd должен быть функцией");
+    if (onRemove && typeof onRemove !== "function")
+      throw new Error("onRemove должен быть функцией");
   },
 
-  _initElement<T, O>(elem: HTMLElement, fn: InitFunction<T, O>, options: O, initializedObjs: T[], onAdd?: (el: HTMLElement, instance: T) => void) {
+  _initElement<T, O>(
+    elem: HTMLElement,
+    fn: InitFunction<T, O>,
+    options: O,
+    initializedObjs: T[],
+    onAdd?: (el: HTMLElement, instance: T) => void
+  ) {
     try {
       const instance = fn(elem, options);
       initializedElements.set(elem, instance);
@@ -64,12 +76,16 @@ const App = {
     }
   },
 
-  _removeElement<T>(elem: Element, initializedObjs: T[], onRemove?: (el: Element, instance: T) => void) {
+  _removeElement<T>(
+    elem: Element,
+    initializedObjs: T[],
+    onRemove?: (el: Element, instance: T) => void
+  ) {
     if (initializedElements.has(elem)) {
       const instance = initializedElements.get(elem);
       const index = initializedObjs.indexOf(instance);
       if (index !== -1) initializedObjs.splice(index, 1);
-      if (instance && typeof instance.destroy === 'function') instance.destroy();
+      if (instance && typeof instance.destroy === "function") instance.destroy();
       initializedElements.delete(elem);
       if (onRemove) onRemove(elem, instance);
     }
@@ -101,15 +117,22 @@ const App = {
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType !== Node.ELEMENT_NODE) return;
             const element = node as Element;
-            if (element.matches(selector)) this._initElement(element as HTMLElement, fn, options, initializedObjs, onAdd);
-            element.querySelectorAll(selector).forEach((el) => this._initElement(el as HTMLElement, fn, options, initializedObjs, onAdd));
+            if (element.matches(selector))
+              this._initElement(element as HTMLElement, fn, options, initializedObjs, onAdd);
+            element
+              .querySelectorAll(selector)
+              .forEach((el) =>
+                this._initElement(el as HTMLElement, fn, options, initializedObjs, onAdd)
+              );
           });
 
           mutation.removedNodes.forEach((node) => {
             if (node.nodeType !== Node.ELEMENT_NODE) return;
             const element = node as Element;
             if (element.matches(selector)) this._removeElement(element, initializedObjs, onRemove);
-            element.querySelectorAll(selector).forEach((el) => this._removeElement(el, initializedObjs, onRemove));
+            element
+              .querySelectorAll(selector)
+              .forEach((el) => this._removeElement(el, initializedObjs, onRemove));
           });
         });
       });
@@ -121,7 +144,9 @@ const App = {
       observer?.disconnect();
       while (initializedObjs.length) {
         const instance = initializedObjs[0];
-        const elem = Array.from(initializedElements.keys()).find((key) => initializedElements.get(key) === instance);
+        const elem = Array.from(initializedElements.keys()).find(
+          (key) => initializedElements.get(key) === instance
+        );
         if (elem) this._removeElement(elem, initializedObjs, onRemove);
       }
     };
@@ -148,7 +173,14 @@ const App = {
 
   _scriptCache: new Map<string, Promise<void>>(),
 
-  async loadScript({ path, onload, onerror, async = true, defer = false, attributes = {} }: LoadScriptOptions) {
+  async loadScript({
+    path,
+    onload,
+    onerror,
+    async = true,
+    defer = false,
+    attributes = {},
+  }: LoadScriptOptions) {
     if (!this._scriptCache.has(path)) {
       const promise = new Promise<void>((resolve, reject) => {
         const script = document.createElement("script");
@@ -170,13 +202,25 @@ const App = {
       this._scriptCache.set(path, promise);
     }
 
-    return this._scriptCache.get(path)!.then(() => { onload?.(); }).catch((err) => { onerror?.(); throw err; });
+    const promise = this._scriptCache.get(path);
+
+    if (!promise) {
+      return Promise.reject(new Error(`No cache for script: ${path}`));
+    }
+
+    return promise
+      .then(() => {
+        onload?.();
+      })
+      .catch((err) => {
+        onerror?.();
+        throw err;
+      });
   },
 
   init(options: AppInitOptions = {}) {
-
     if ((window as any).App && !options.force) {
-      console.warn('window.App уже существует. Используйте force=true для перезаписи.');
+      console.warn("window.App уже существует. Используйте force=true для перезаписи.");
       return this;
     }
 
@@ -189,18 +233,18 @@ const App = {
 
   renderJSX(elem: HTMLElement, jsx: React.ReactNode) {
     let root = reactRoots.get(elem);
-  
+
     if (!root) {
       root = createRoot(elem);
       reactRoots.set(elem, root);
     }
-  
+
     root.render(jsx);
   },
 
   debug(...args: any[]) {
     if (!this._debug) return;
-    console.log('%c[App]', 'color: #888', ...args);
+    console.log("%c[App]", "color: #888", ...args); // eslint-disable-line no-console
   },
 };
 
