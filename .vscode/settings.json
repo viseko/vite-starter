@@ -23,7 +23,7 @@
 
   // Prettier для CSS
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "vscode.css-language-features",
     "editor.formatOnSave": true
   },
 
