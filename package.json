@@ -16,7 +16,8 @@
     "prepare:sprite": "node ./app/npm-scripts/prepare-svg-sprite.js",
     "prepare:tiny": "node ./app/npm-scripts/prepare-tiny.js",
     "prepare:fonts": "node ./app/npm-scripts/prepare-fonts.js",
-    "prepare:favicon": "node ./app/npm-scripts/prepare-favicon.js"
+    "prepare:favicon": "node ./app/npm-scripts/prepare-favicon.js",
+    "validate:html": "html-validate \"./build/**/*.html\""
   },
   "author": "Viktor Konovalov",
   "license": "ISC",
@@ -28,6 +29,7 @@
     "dotenv": "^16.6.1",
     "fonteditor-core": "^2.6.3",
     "ftp-deploy": "^2.4.3",
+    "html-validate": "^10.9.0",
     "png-to-ico": "^3.0.1",
     "pug": "^3.0.4",
     "sass": "^1.98.0",
