@@ -30,6 +30,7 @@
   "author": "Viktor Konovalov",
   "license": "ISC",
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^8.0.0",
     "@mish.dev/vite-convert-pug-in-html": "^2.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -54,7 +55,8 @@
     "tinify": "^1.8.2",
     "ttf2woff2": "^8.0.1",
     "typescript-eslint": "^8.58.2",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vite-plugin-purgecss": "^0.2.13"
   },
   "dependencies": {
     "react": "^19.2.5",
