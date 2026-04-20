@@ -12,8 +12,8 @@
     &::before {
       content: "";
       position: absolute;
-      left: 0;
       top: 0.7em;
+      left: 0;
       width: 16px;
       height: 2px;
       background-color: $color;
@@ -49,20 +49,20 @@
 
     &::before {
       content: counters(item, ".") ".";
+      top: $top;
       
       display: inline-block;
-      min-width: $offset;
-      padding-right: 8px;
-      top: $top;
       width: $size;
+      min-width: $offset;
       height: $size;
+      padding-right: 8px;
       color: $color;
       font-size: $font-size;
       font-weight: $font-weight;
       line-height: $line-height;
       text-align: left;
-      border-radius: $radius;
       background-color: $bg;
+      border-radius: $radius;
     }
 
     & > ol,

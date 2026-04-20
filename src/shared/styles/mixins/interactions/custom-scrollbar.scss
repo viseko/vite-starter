@@ -1,7 +1,7 @@
 @mixin custom-scrollbar($color, $bg, $width, $border-radius: 20px, $border-size: 2px) {
-  @-moz-document url-prefix() {
-    scrollbar-width: thin;
+  @document url-prefix() {
     scrollbar-color: $color $bg;
+    scrollbar-width: thin;
   } 
   
   &::-webkit-scrollbar {
@@ -10,14 +10,14 @@
   }
 
   &::-webkit-scrollbar-track {
-    border-radius: $border-radius;
-    border: $border-size solid map-get($colors, white);
     background-color: $bg;
+    border: $border-size solid map-get($colors, white);
+    border-radius: $border-radius;
   }
 
   &::-webkit-scrollbar-thumb {
+    background-color: $color;
     border: $border-size solid map-get($colors, white);
     border-radius: $border-radius;
-    background-color: $color;
   }
 }

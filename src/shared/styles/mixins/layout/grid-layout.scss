@@ -79,10 +79,10 @@
 
   // Установка промежутков
   gap: $gap; // Общий промежуток для совместимости со старыми браузерами
-  column-gap: $column-gap; // Отдельный контроль над колонками
   row-gap: $row-gap; // Отдельный контроль над рядами
+  align-items: $align-items;
 
   // Выравнивание содержимого ячеек
   justify-items: $justify-items;
-  align-items: $align-items;
+  column-gap: $column-gap; // Отдельный контроль над колонками
 }

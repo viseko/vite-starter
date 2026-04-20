@@ -72,8 +72,8 @@
   
   // Стилизация футера (если есть)
   tfoot {
-    background-color: $bg-header;
     font-weight: $header-font-weight;
+    background-color: $bg-header;
     
     td {
       padding: $cell-padding-y $cell-padding-x;

@@ -1,9 +1,9 @@
 @mixin remove-scrollbar {
   @media (hover: none), (pointer: coarse) {
     overflow: auto;
-    scrollbar-color: transparent;
     border: 0;
     -ms-overflow-style: none;  /* Для Internet Explorer 10+ */
+    scrollbar-color: transparent;
     scrollbar-width: none;  /* Для Firefox */
 
     &::-webkit-scrollbar {
@@ -17,9 +17,9 @@
 
 @mixin total-remove-scrollbar {
   overflow: auto;
-  scrollbar-color: transparent;
   border: 0;
   -ms-overflow-style: none;  /* Для Internet Explorer 10+ */
+  scrollbar-color: transparent;
   scrollbar-width: none;  /* Для Firefox */
 
   &::-webkit-scrollbar {

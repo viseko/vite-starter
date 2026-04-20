@@ -47,9 +47,9 @@
   .table-wrapper {
     @include wide-container-paddings;
     @include trim-margins;
+    margin-top: var(--table-margin);
 
     overflow: auto;
-    margin-top: var(--table-margin);
   }
 
   figure {

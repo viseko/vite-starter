@@ -4,8 +4,8 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: var(--heading-line-height);
   font-weight: var(--heading-weight);
+  line-height: var(--heading-line-height);
 
   &:first-child {
     margin-top: 0;
@@ -17,16 +17,16 @@ h6 {
 }
 
 h1 {
-  font-size: var(--h1-size);
   margin: var(--h1-margin);
+  font-size: var(--h1-size);
 }
 
 h2 {
-  font-size: var(--h2-size);
   margin: var(--h2-margin);
+  font-size: var(--h2-size);
 }
 
 h3 {
-  font-size: var(--h3-size);
   margin: var(--h3-margin);
+  font-size: var(--h3-size);
 }
