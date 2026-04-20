@@ -14,22 +14,24 @@
     "ftp:images": "node ./app/npm-scripts/deploy-ftp.js --images",
     "ftp:assets": "node ./app/npm-scripts/deploy-ftp.js --assets",
     "prepare:sprite": "node ./app/npm-scripts/prepare-svg-sprite.js",
-    "prepare:tiny": "node ./app/npm-scripts/prepare-tiny.js"
+    "prepare:tiny": "node ./app/npm-scripts/prepare-tiny.js",
+    "prepare:fonts": "node ./app/npm-scripts/prepare-fonts.js"
   },
-  "author": "Viseko23 <viseko23@gmail.com>",
+  "author": "Viktor Konovalov",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@mish.dev/vite-convert-pug-in-html": "^2.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "chalk": "^5.6.2",
     "dotenv": "^16.6.1",
-    "ftp-deploy": "^2.4.7",
+    "fonteditor-core": "^2.6.3",
+    "ftp-deploy": "^2.4.3",
     "pug": "^3.0.4",
     "sass": "^1.98.0",
     "svgstore": "^3.0.1",
     "tinify": "^1.8.2",
+    "ttf2woff2": "^8.0.1",
     "vite": "^7.3.1"
   },
   "dependencies": {
