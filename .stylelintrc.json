@@ -332,7 +332,15 @@
     "function-no-unknown": [
       true,
       {
-        "ignoreFunctions": ["/^[a-z]+\\./", "v-bind", "map-get", "map-has-key", "darken", "lighten"]
+        "ignoreFunctions": [
+          "/^[a-z]+\\./",
+          "v-bind",
+          "map-get",
+          "map-has-key",
+          "darken",
+          "lighten",
+          "fluid"
+        ]
       }
     ],
     "keyframe-block-no-duplicate-selectors": null,

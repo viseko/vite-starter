@@ -12,9 +12,11 @@
   line-height: var(--line-height);
 
   p {
+    @include trim-margins;
+
     max-width: var(--paragraph-max-width);
   }
-  
+
   ul,
   ol {
     max-width: var(--list-max-width);
@@ -31,16 +33,13 @@
   }
 
   ol {
-    @include list-num(
-      $color: map-get($colors, primary),
-      $radius: 50%,
-    );
+    @include list-num($color: map-get($colors, primary), $radius: 50%);
   }
 
   table {
     @include table;
     @include trim-margins;
-    
+
     margin: var(--table-margin) 0;
   }
 
@@ -55,6 +54,51 @@
   figure {
     @include trim-margins;
 
+    display: flex;
+    flex-direction: column;
+    gap: fluid(8, 16);
+    max-width: 100%;
+    margin: fluid(24, 40) 0;
     margin: var(--figure-margin) 0;
+
+    img {
+      align-self: center;
+    }
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  img._full {
+    width: 100%;
+  }
+
+  blockquote {
+    @include trim-margins;
+
+    margin: 24px 0;
+    padding-left: fluid(16, 24);
+    border-left: 2px solid map-get($colors, primary);
+  }
+
+  figcaption {
+    font-size: 16px;
+    line-height: 32px;
+
+    @media (max-width: $sm) {
+      font-size: 14px;
+      line-height: 24px;
+    }
+  }
+
+  audio,
+  video,
+  iframe {
+    @include trim-margins;
+
+    margin: fluid(16, 24) 0;
   }
 }
