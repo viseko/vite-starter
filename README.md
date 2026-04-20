@@ -75,7 +75,7 @@ npm install
 npm start
 ```
 
-Откроется dev-сервер с hot reload на `http://localhost:5173`
+Откроется dev-сервер с hot reload на `http://localhost:3000`
 
 ### Сборка
 

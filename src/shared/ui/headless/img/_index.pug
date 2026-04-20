@@ -7,7 +7,7 @@ mixin _img(data, srcset=null)
     alt=(data.alt ? data.alt.replace(/&nbsp;/g, " ") : ""),
     width=data.width,
     height=data.height,
-    loading=("lazy")
+    loading="lazy"
   )&attributes({
     ...data.attributes
   })
