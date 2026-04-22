@@ -1,9 +1,15 @@
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 
-type InitFunction<T = any, O = any> = (el: HTMLElement, options: O) => T;
+declare global {
+  interface Window {
+    App?: object; // замени на реальный тип
+  }
+}
 
-type ElementConstructor<T = any, O = any> = new (el: Element, options: O) => T;
+type InitFunction<T = void, O = object> = (el: HTMLElement, options: O) => T;
+
+type ElementConstructor<T, O> = new (el: HTMLElement, options: O) => T;
 
 interface InstallConfig<T = any> {
   observe?: boolean;
@@ -71,12 +77,14 @@ const App = {
       initializedElements.set(elem, instance);
       initializedObjs.push(instance);
       if (onAdd) onAdd(elem, instance);
-    } catch (e: any) {
-      console.error(`Ошибка при инициализации элемента: ${e.message}`, elem);
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(`Ошибка при инициализации элемента: ${e.message}`, elem);
+      }
     }
   },
 
-  _removeElement<T>(
+  _removeElement<T = HTMLElement>(
     elem: Element,
     initializedObjs: T[],
     onRemove?: (el: Element, instance: T) => void
@@ -93,7 +101,7 @@ const App = {
 
   install<T = any, O = any>(
     selector: string,
-    fn: InitFunction<T, O>,
+    fn: (el: HTMLElement, options: O) => T,
     options: O = {} as O,
     config: InstallConfig<T> = {}
   ) {
@@ -219,12 +227,12 @@ const App = {
   },
 
   init(options: AppInitOptions = {}) {
-    if ((window as any).App && !options.force) {
+    if ((window as Window).App && !options.force) {
       console.warn("window.App уже существует. Используйте force=true для перезаписи.");
       return this;
     }
 
-    (window as any).App = this;
+    (window as Window).App = this;
 
     this._debug = !!options.debug;
 
