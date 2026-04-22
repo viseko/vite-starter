@@ -19,8 +19,6 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": resolve(__dirname, "src"),
-        "@img": resolve(__dirname, "src/assets/img"),
-        "@fonts": resolve(__dirname, ""),
       },
     },
     plugins: buildPlugins({
