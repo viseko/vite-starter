@@ -1,11 +1,20 @@
 .content {
+  // Типографика
   --paragraph-max-width: 900px;
   --list-max-width: 600px;
   // --font-size: 16px;
   // --line-height: 150%;
+  // Списки
   --list-spacing: 8px;
   --list-margin: 16px 0;
+  // Изображения
   --figure-margin: 24px 0;
+  --figure-radius: 12px;
+  --figcaption-margin: 12px 0 0 12px;
+  --figcaption-font-size: #{fluid(16, 18)};
+  --figcaption-line-height: 150%;
+  --figcaption-color: #{map-get($colors, black)};
+  // Таблицы
   --table-margin: 40px;
 
   font-size: var(--font-size);
@@ -56,13 +65,14 @@
 
     display: flex;
     flex-direction: column;
-    gap: fluid(8, 16);
+    gap: var(--figure-gap);
+    align-items: flex-start;
     max-width: 100%;
-    margin: fluid(24, 40) 0;
+    margin: fluid(24, 40);
     margin: var(--figure-margin) 0;
 
     img {
-      align-self: center;
+      border-radius: var(--figure-radius);
     }
   }
 
@@ -70,10 +80,6 @@
     display: block;
     max-width: 100%;
     height: auto;
-  }
-
-  img._full {
-    width: 100%;
   }
 
   blockquote {
@@ -85,13 +91,10 @@
   }
 
   figcaption {
-    font-size: 16px;
-    line-height: 32px;
-
-    @media (max-width: $sm) {
-      font-size: 14px;
-      line-height: 24px;
-    }
+    margin: var(--figcaption-margin);
+    color: var(--figcaption-color);
+    font-size: var(--figcaption-font-size);
+    line-height: var(--figcaption-line-height);
   }
 
   audio,
