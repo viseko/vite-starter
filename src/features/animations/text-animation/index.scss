@@ -1,0 +1,17 @@
+[data-ta] {
+  opacity: 0;
+}
+
+[data-ta]._initialized {
+  opacity: 1;
+}
+
+.text-part {
+  display: inline;
+  white-space: pre;
+  opacity: 0;
+}
+
+// .text-word {
+//   white-space: nowrap;
+// }
