@@ -73,7 +73,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           // Скрываем уведомления об устаревающих функциях
-          silenceDeprecations: ["import", "global-builtin"],
+          silenceDeprecations: ["import", "global-builtin", "color-functions"],
           // Делаем везде видимыми SCSS-переменные
           additionalData: `@import "@/shared/styles/variables.scss";`,
         },
