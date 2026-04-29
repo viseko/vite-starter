@@ -42,7 +42,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, "src/main.ts"),
-          styles: resolve(__dirname, "src/main.scss"),
         },
         output: {
           entryFileNames: "assets/js/[name].min.js",

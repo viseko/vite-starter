@@ -1,3 +1,5 @@
+import "./main.scss";
+
 import { init } from "./app/App";
 import "./shared/ui";
 import "./widgets";
