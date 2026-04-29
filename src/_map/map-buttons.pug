@@ -25,4 +25,17 @@ mixin map-buttons(data={})
       text: "disabled",
       disabled: true,
     })
+  h3 btn--size--*
+  .flex-wrap.gap-2.items-center
+    +btn({
+      size: "sm",
+      text: "sm",
+    })
+    +btn({
+      size: "lg",
+      text: "lg",
+    })
 
+  h2 btn-menu
+  .flex-wrap.gap-2.items-center
+    +btn-menu

@@ -3,7 +3,7 @@ mixin btn(data={})
 
   +btn-element({
     ...data,
-    className: `btn${data.className ? ` ${data.className}` : ""}${data.theme ? ` btn--theme--${data.theme}` : ""}${data.size ? ` btn--size--${data.size}` : ""}`,
+    baseClass: "btn",
     attributes: {
       ...(ripple ? {"data-ripple-effect": ""} : {}),
       ...(data.to && {"data-to": data.to}),

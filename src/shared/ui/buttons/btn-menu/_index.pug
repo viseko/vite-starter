@@ -1,0 +1,13 @@
+mixin btn-menu(data={})
+  button.btn-menu.js-btn-menu(
+    class=data.className,
+    title="Открыть меню",
+    data-body-class="_menu-open",
+    aria-expanded="false",
+    aria-controls=data.target
+  )
+    span.btn-menu__icon
+      span._on
+        +icon("menu", 20, 20)
+      span._off
+        +icon("close", 20, 20)

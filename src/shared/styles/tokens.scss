@@ -4,7 +4,9 @@
   --step: 8px; // Единица модульной сетки
   --indent-width: 24px; // Расстояние между колонками
   --column-count: 12; // Количество колонок
-  --column-width: calc((var(--container-width) - (var(--column-count) - 1) * var(--indent-width)) / var(--column-count)); // Ширина колонки
+  --column-width: calc(
+    (var(--container-width) - (var(--column-count) - 1) * var(--indent-width)) / var(--column-count)
+  ); // Ширина колонки
 
   // * контейнер
   --container-width: 1280px; // Макс. ширина контейнера
