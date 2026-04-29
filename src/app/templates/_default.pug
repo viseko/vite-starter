@@ -14,17 +14,39 @@ html(lang="ru")
     //- Base
     if (!IS_DEV)
       base(href=`/${PROJECT_NAME}/`)
-    
+
     //- Мета-данные
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
     meta(name='format-detection' content='telephone=no')
 
+    //- OpenGraph
+    //- meta(property="og:type", content="website")
+    //- meta(property="og:title", content=title)
+    //- meta(property="og:description", content="Пример Open Graph описания")
+    //- meta(property="og:url", content="https://site-url.ru")
+    //- meta(property="og:image", content=`${PATH.img}/og-share/cover.jpg`)
+    //- meta(property="og:site_name", content=title)
+    //- meta(property="og:locale", content="ru_RU")
+    //- //- Pinterest
+    //- meta(name="pinterest", content="nopin", description="Sorry, you can\'t save from my website!")
+    //- //-  Twitter
+    //- meta(property="twitter:card", content="summary_large_image")
+    //- meta(property="twitter:image:src", content=`${PATH.img}/og-share/cover.jpg`)
+    //- //-  VK
+    //- meta(property="vk:image", content=`${PATH.img}/og-share/cover.jpg`)
+
     block meta
 
     //- Предзагрузки
+    //- * 1. Шрифты
     link(rel='preload' href=`${PATH.fonts}/inter-variable.woff2` as='font' type='font/woff2' crossorigin)
+    //- * 2. Стили
+    if (IS_DEV)
+      link(rel="preload", href=`/main.scss` as="style")
+    else
+      link(rel="preload", href=`${BASE_URL}/assets/css/main.min.css?v=${TIMESTAMP}` as="style")
 
     //- Стили
     if (IS_DEV)
@@ -36,9 +58,9 @@ html(lang="ru")
     link(rel='icon' type='image/png' href=`${BASE_URL}/favicon/favicon-96x96.png` sizes='96x96')
     link(rel='icon' type='image/svg+xml' href=`${BASE_URL}/favicon/favicon.svg`)
     link(rel='shortcut icon' href=`${BASE_URL}/favicon/favicon.ico`)
-    link(rel='apple-touch-icon' sizes='180x180' href=`${BASE_URL}/apple-touch-icon.png`)
+    link(rel='apple-touch-icon' sizes='180x180' href=`${BASE_URL}favicon/apple-touch-icon.png`)
     link(rel='manifest' href=`${BASE_URL}/favicon/site.webmanifest`)
-    
+
   body(
     class=bodyClass
   )
@@ -47,11 +69,11 @@ html(lang="ru")
       main.page__main
         block body
       +page-footer
-      
+
 
     //- Скрипты
     if (IS_DEV)
-      script(src="/main.ts" type="module") 
+      script(src="/main.ts" type="module")
     else
-      script(src=`${BASE_URL}/assets/js/main.min.js?v=${TIMESTAMP}`) 
+      script(src=`${BASE_URL}/assets/js/main.min.js?v=${TIMESTAMP}`)
     block scripts

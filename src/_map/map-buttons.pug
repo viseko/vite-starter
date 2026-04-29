@@ -1,0 +1,28 @@
+mixin map-buttons(data={})
+  h2 Без стилей
+  .flex-wrap.gap-2
+    +btn-element({
+      href: "#"
+    })
+      | Простая ссылка
+    +btn-element
+      | Простая кнопка
+
+  h2 btn
+  .flex-wrap.gap-2
+    +btn({
+      text: "Кнопка",
+    })
+    +btn({
+      text: "Кнопка-ссылка",
+      href: "#"
+    })
+    +btn({
+      text: "div с классом btn",
+      type: "div"
+    })
+    +btn({
+      text: "disabled",
+      disabled: true,
+    })
+

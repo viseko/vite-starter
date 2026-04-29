@@ -1,10 +1,9 @@
 mixin page-header(data={})
-  header.page-header(
+  header.page-header.js-page-header(
     class=data.className,
     class=(data.theme ? `page-header--theme--${data.theme}` : null),
     class=(data.size ? `page-header--size--${data.size}` : null),
     data-role=data.role,
   )
     .container
-      
-  
+

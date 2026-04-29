@@ -1,0 +1,16 @@
+mixin btn(data={})
+  - var ripple = true
+
+  +btn-element({
+    ...data,
+    className: `btn${data.className ? ` ${data.className}` : ""}${data.theme ? ` btn--theme--${data.theme}` : ""}${data.size ? ` btn--size--${data.size}` : ""}`,
+    attributes: {
+      ...(ripple ? {"data-ripple-effect": ""} : {}),
+      ...(data.to && {"data-to": data.to}),
+      ...data.attributes
+    }
+  })
+    if (data.text)
+      span!=data.text
+    else
+      block

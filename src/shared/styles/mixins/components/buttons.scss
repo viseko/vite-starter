@@ -1,0 +1,12 @@
+// Миксин для стилизации кнопок с кастомными параметрами.
+
+@mixin button-defaults {
+  display: inline-flex;
+  white-space: nowrap;
+  user-select: none;
+
+  &:disabled,
+  &._disabled {
+    pointer-events: none;
+  }
+}

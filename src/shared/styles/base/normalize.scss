@@ -15,12 +15,10 @@ html {
   touch-action: manipulation; // запрет зумить по двойному тапу
 }
 
-
 html {
   box-sizing: border-box;
   height: 100%;
   font-size: var(--step);
-  scroll-behavior: smooth;
   text-size-adjust: 100%;
 }
 

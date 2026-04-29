@@ -1,5 +1,5 @@
 mixin page-footer(data={})
-  .page-footer(
+  footer.page-footer(
     class=data.className,
     class=(data.theme ? `page-footer--theme--${data.theme}` : null),
     class=(data.size ? `page-footer--size--${data.size}` : null),
@@ -9,4 +9,3 @@ mixin page-footer(data={})
       .flex-row.justify-between.gap-3
         +footer-copy
         +footer-dev
-  

@@ -1,0 +1,7 @@
+mixin nav-link(data={})
+  -var isCurrent = page === data.href.replace(".html", "")
+  a.nav-link(
+    href=data.href,
+    class=(isCurrent ? "_active" : null)
+    aria-current=(isCurrent ? "page" : null)
+  )!=data.text

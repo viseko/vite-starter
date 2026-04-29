@@ -1,17 +1,22 @@
-// Вычисления
+// ВЫЧИСЛЕНИЯ
 import "./calculations/navigator"; // детектим ОС клиента
 import "./calculations/scrollbar-width"; // ширина скроллбара
 import "./calculations/vh"; // 1vh в пикселях
 
-// Хаки вёрстки
+// ХАКИ ВЁРСТКИ
 import "./layout/adaptive-move"; // адаптивный перенос вместо дублирования контента
 // import "./layout/table-wrapper"; // обёртка контентных таблиц в .table-wrapper
 
-// Анимации
+// ПОЛЬЗ. ВЗАИМОДЕЙСТВИЕ
+import "./interactions/forms"; // Инициализация форм
+import "./interactions/back"; // Кнопка "Назад"
+
+// АНИМАЦИИ
 // import "./animations/animate-count";
 // import "./animations/animate-on-scroll";
 import "./animations/ripple-effect";
 
-// Сторонние библиотеки
+// СТОРОННИЕ БИБЛИОТЕКИ
 // import "./vendors/fancybox"; // модальная галерея
 // import "./vendors/tippy"; // подсказки при наведении
+import "./vendors/emerge"; //

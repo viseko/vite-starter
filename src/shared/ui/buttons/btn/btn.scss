@@ -1,0 +1,55 @@
+.btn {
+  --height: 48px;
+  --padding-x: 24px;
+  --font-size: 16px;
+  --font-weight: 500;
+  --line-height: 24px;
+  --border: 0;
+  --border-radius: 8px;
+  --color: #{map-get($colors, white)};
+  --hover-color: #{map-get($colors, white)};
+  --bg-color: #{map-get($colors, primary)};
+  --hover-bg-color: #{darken(map-get($colors, primary), 5%)};
+
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  padding: calc((var(--height) - var(--line-height)) / 2 - 1px) var(--padding-x)
+    calc((var(--height) - var(--line-height)) / 2 + 1px);
+  color: var(--color);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  line-height: var(--line-height);
+  white-space: nowrap;
+  background-color: var(--bg-color);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    transform 0.1s;
+  user-select: none;
+
+  &:disabled,
+  &._disabled {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+a.btn,
+button.btn:not(:disabled) {
+  &:hover {
+    color: var(--hover-color);
+    background-color: var(--hover-bg-color);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+a.btn {
+  text-decoration: none;
+}

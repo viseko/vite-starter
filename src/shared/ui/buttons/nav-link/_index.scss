@@ -1,0 +1,20 @@
+.nav-link {
+  color: map-get($colors, black);
+  font-size: 18px;
+  line-height: 13px;
+  text-decoration: none;
+  background-color: transparent;
+  border-radius: 12px;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.3s;
+
+  &:hover {
+    color: map-get($colors, primary);
+  }
+
+  &._active {
+    color: map-get($colors, primary);
+    pointer-events: none;
+  }
+}

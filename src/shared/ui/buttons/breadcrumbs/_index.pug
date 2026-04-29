@@ -1,0 +1,12 @@
+mixin breadcrumbs(data={})
+  if data.list && data.list.length > 0
+    nav.breadcrumbs(aria-label="breadcrumbs")
+      ul.breadcrumbs__list.reset-list(class=data.className)
+        li.breadcrumbs__item 
+          a.breadcrumbs__link(href=data.homeUrl || "index.html") Главная
+        each item, index in data.list
+          li.breadcrumbs__item 
+            if (item.length === 2)
+              a.breadcrumbs__link(href=item[1])!=item[0]
+            else 
+              span.breadcrumbs__text(aria-current="page")!=item[0]
