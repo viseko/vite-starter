@@ -39,3 +39,22 @@ mixin map-buttons(data={})
   h2 btn-menu
   .flex-wrap.gap-2.items-center
     +btn-menu
+
+  h2 nav-link
+  .flex-wrap.gap-2
+    +nav-link({
+      href: `index`,
+      text: "Текущая страница"
+    })
+    +nav-link({
+      href: "404",
+      text: "Другая страница"
+    })
+
+  h2 breadcrumbs
+  +breadcrumbs({
+    list: [
+      ["Каталог", "/404"],
+      ["Детальная"]
+    ]
+  })

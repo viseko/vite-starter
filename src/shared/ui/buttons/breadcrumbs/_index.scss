@@ -15,10 +15,10 @@
 
   &__item {
     display: flex;
-    align-items: center;
     gap: var(--gap);
-    font-size: 16px;
-    line-height: 24px;
+    align-items: center;
+    font-size: fluid(16, 18);
+    line-height: fluid(24, 32);
     white-space: nowrap;
 
     &:not(:last-child)::after {

@@ -1,119 +1,112 @@
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
+import type { ReactNode } from "react";
+import { isDestroyable, mediaSizes } from "./types";
+import type {
+  AppInitOptions,
+  ElementConstructor,
+  InitFunction,
+  InstallConfig,
+  InstallHandle,
+  LoadScriptOptions,
+  MediaSize,
+  Selector,
+} from "./types";
 
 declare global {
   interface Window {
-    App?: object; // замени на реальный тип
+    App: typeof App;
   }
 }
 
-type InitFunction<T = void, O = object> = (el: HTMLElement, options: O) => T;
-
-type ElementConstructor<T, O> = new (el: HTMLElement, options: O) => T;
-
-interface InstallConfig<T = any> {
-  observe?: boolean;
-  onAdd?: (el: Element, instance: T) => void;
-  onRemove?: (el: Element, instance: T) => void;
-}
-
-interface LoadScriptOptions {
-  path: string;
-  onload?: () => void;
-  onerror?: () => void;
-  async?: boolean;
-  defer?: boolean;
-  attributes?: Record<string, string>;
-}
-
-const initializedElements = new Map<Element, any>();
-
+/** React-корни, созданные через App.renderJSX(), по DOM-элементу, в который они смонтированы. */
 const reactRoots = new Map<HTMLElement, Root>();
 
-const sizes = {
-  xxs: 359,
-  xs: 400,
-  sm: 576,
-  md: 768,
-  lg: 992,
-  xl: 1200,
-  xxl: 1400,
-} as const;
-
-type MediaSize = keyof typeof sizes;
-
-interface AppInitOptions {
-  force?: boolean;
-  ymID?: number;
-  debug?: boolean;
-}
-
+/**
+ * Точка входа приложения: инициализация DOM-виджетов по CSS-селекторам,
+ * кеширующая загрузка внешних скриптов, монтирование React-компонентов
+ * внутрь Pug/HTML-разметки, брейкпоинты.
+ *
+ * После вызова App.init() доступен глобально как `window.App`.
+ */
 const App = {
   _debug: false,
+  _ymID: null as number | null,
+  _scriptCache: new Map<string, Promise<void>>(),
 
-  _validate<T, O>(
-    selector: string,
-    fn: InitFunction<T, O> | ElementConstructor<T, O>,
-    config: InstallConfig<T> = {}
-  ) {
-    const { onAdd, onRemove } = config;
-    if (typeof selector !== "string" || !selector)
-      throw new Error("Селектор должен быть непустой строкой");
-    if (typeof fn !== "function") throw new Error("Необходимо передать функцию");
-    if (onAdd && typeof onAdd !== "function") throw new Error("onAdd должен быть функцией");
-    if (onRemove && typeof onRemove !== "function")
-      throw new Error("onRemove должен быть функцией");
-  },
-
+  /**
+   * Инициализирует один элемент через `fn` и сохраняет результат в `registry`/`instances`.
+   * Уже инициализированный (присутствующий в `registry`) элемент повторно не трогает —
+   * это защищает от двойной инициализации при пересекающихся мутациях DOM.
+   * Ошибка инициализации логируется и не прерывает обработку остальных элементов.
+   */
   _initElement<T, O>(
     elem: HTMLElement,
     fn: InitFunction<T, O>,
     options: O,
-    initializedObjs: T[],
+    registry: Map<HTMLElement, T>,
+    instances: T[],
     onAdd?: (el: HTMLElement, instance: T) => void
-  ) {
+  ): void {
+    if (registry.has(elem)) return;
+
     try {
       const instance = fn(elem, options);
-      initializedElements.set(elem, instance);
-      initializedObjs.push(instance);
-      if (onAdd) onAdd(elem, instance);
+      registry.set(elem, instance);
+      instances.push(instance);
+      onAdd?.(elem, instance);
     } catch (e) {
-      if (e instanceof Error) {
-        console.error(`Ошибка при инициализации элемента: ${e.message}`, elem);
-      }
+      console.error(
+        `Ошибка при инициализации элемента: ${e instanceof Error ? e.message : String(e)}`,
+        elem
+      );
     }
   },
 
-  _removeElement<T = HTMLElement>(
-    elem: Element,
-    initializedObjs: T[],
-    onRemove?: (el: Element, instance: T) => void
-  ) {
-    if (initializedElements.has(elem)) {
-      const instance = initializedElements.get(elem);
-      const index = initializedObjs.indexOf(instance);
-      if (index !== -1) initializedObjs.splice(index, 1);
-      if (instance && typeof instance.destroy === "function") instance.destroy();
-      initializedElements.delete(elem);
-      if (onRemove) onRemove(elem, instance);
-    }
+  /**
+   * Уничтожает экземпляр, привязанный к `elem` (вызывает `destroy()`, если он есть),
+   * и удаляет его из `registry`/`instances`.
+   */
+  _removeElement<T>(
+    elem: HTMLElement,
+    registry: Map<HTMLElement, T>,
+    instances: T[],
+    onRemove?: (el: HTMLElement, instance: T) => void
+  ): void {
+    const instance = registry.get(elem);
+    if (instance === undefined) return;
+
+    const index = instances.indexOf(instance);
+    if (index !== -1) instances.splice(index, 1);
+    if (isDestroyable(instance)) instance.destroy();
+    registry.delete(elem);
+    onRemove?.(elem, instance);
   },
 
-  install<T = any, O = any>(
-    selector: string,
-    fn: (el: HTMLElement, options: O) => T,
+  /**
+   * Находит все элементы по `selector`, инициализирует их через `fn` и (пока `config.observe`
+   * не выставлен в `false`) следит за DOM через MutationObserver: доинициализирует новые
+   * подходящие элементы и уничтожает экземпляры удалённых.
+   *
+   * Регистр элемент → экземпляр локален для конкретного вызова `install()`, поэтому один и тот же
+   * DOM-элемент может независимо участвовать в нескольких `install()`-подписках с разными селекторами.
+   *
+   * @returns хендл с текущими экземплярами и методами `stop()` (снять наблюдение) / `destroy()` (снять наблюдение и уничтожить все экземпляры).
+   */
+  install<T, O = unknown>(
+    selector: Selector,
+    fn: InitFunction<T, O>,
     options: O = {} as O,
     config: InstallConfig<T> = {}
-  ) {
-    this._validate(selector, fn, config);
-
+  ): InstallHandle<T> {
     const { observe = true, onAdd, onRemove } = config;
-    const initializedObjs: T[] = [];
+    const registry = new Map<HTMLElement, T>();
+    const instances: T[] = [];
     let observer: MutationObserver | null = null;
 
     const initElements = () => {
-      document.querySelectorAll(selector).forEach((elem) => {
-        this._initElement(elem as HTMLElement, fn, options, initializedObjs, onAdd);
+      document.querySelectorAll<HTMLElement>(selector).forEach((elem) => {
+        this._initElement(elem, fn, options, registry, instances, onAdd);
       });
     };
 
@@ -123,24 +116,20 @@ const App = {
       observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           mutation.addedNodes.forEach((node) => {
-            if (node.nodeType !== Node.ELEMENT_NODE) return;
-            const element = node as Element;
-            if (element.matches(selector))
-              this._initElement(element as HTMLElement, fn, options, initializedObjs, onAdd);
-            element
-              .querySelectorAll(selector)
-              .forEach((el) =>
-                this._initElement(el as HTMLElement, fn, options, initializedObjs, onAdd)
-              );
+            if (!(node instanceof HTMLElement)) return;
+            if (node.matches(selector))
+              this._initElement(node, fn, options, registry, instances, onAdd);
+            node
+              .querySelectorAll<HTMLElement>(selector)
+              .forEach((el) => this._initElement(el, fn, options, registry, instances, onAdd));
           });
 
           mutation.removedNodes.forEach((node) => {
-            if (node.nodeType !== Node.ELEMENT_NODE) return;
-            const element = node as Element;
-            if (element.matches(selector)) this._removeElement(element, initializedObjs, onRemove);
-            element
-              .querySelectorAll(selector)
-              .forEach((el) => this._removeElement(el, initializedObjs, onRemove));
+            if (!(node instanceof HTMLElement)) return;
+            if (node.matches(selector)) this._removeElement(node, registry, instances, onRemove);
+            node
+              .querySelectorAll<HTMLElement>(selector)
+              .forEach((el) => this._removeElement(el, registry, instances, onRemove));
           });
         });
       });
@@ -148,39 +137,38 @@ const App = {
       observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    const destroy = () => {
-      observer?.disconnect();
-      while (initializedObjs.length) {
-        const instance = initializedObjs[0];
-        const elem = Array.from(initializedElements.keys()).find(
-          (key) => initializedElements.get(key) === instance
-        );
-        if (elem) this._removeElement(elem, initializedObjs, onRemove);
-      }
-    };
-
     return {
-      instances: initializedObjs,
+      instances,
       stop: () => observer?.disconnect(),
-      destroy,
+      destroy: () => {
+        observer?.disconnect();
+        Array.from(registry.keys()).forEach((elem) =>
+          this._removeElement(elem, registry, instances, onRemove)
+        );
+      },
     };
   },
 
+  /** Ширина брейкпоинта `size` в пикселях; при `mobileFirst` возвращает границу минус 1px. */
   getMediaSize(size: MediaSize, mobileFirst = false): number {
-    return sizes[size] - Number(mobileFirst);
+    return mediaSizes[size] - Number(mobileFirst);
   },
 
-  installClass<T = any, O = any>(
-    selector: string,
+  /** То же, что install(), но создаёт экземпляр через `new ClassConstructor(el, options)`. */
+  installClass<T, O = unknown>(
+    selector: Selector,
     ClassConstructor: ElementConstructor<T, O>,
     options: O = {} as O,
     config: InstallConfig<T> = {}
-  ) {
+  ): InstallHandle<T> {
     return this.install(selector, (el, opts) => new ClassConstructor(el, opts), options, config);
   },
 
-  _scriptCache: new Map<string, Promise<void>>(),
-
+  /**
+   * Загружает внешний скрипт по `path` не более одного раза — повторные вызовы для
+   * того же пути переиспользуют закешированный промис. Если загрузка завершилась
+   * ошибкой, запись удаляется из кеша, чтобы следующий вызов мог повторить попытку.
+   */
   async loadScript({
     path,
     onload,
@@ -188,9 +176,11 @@ const App = {
     async = true,
     defer = false,
     attributes = {},
-  }: LoadScriptOptions) {
-    if (!this._scriptCache.has(path)) {
-      const promise = new Promise<void>((resolve, reject) => {
+  }: LoadScriptOptions): Promise<void> {
+    let promise = this._scriptCache.get(path);
+
+    if (!promise) {
+      promise = new Promise<void>((resolve, reject) => {
         const script = document.createElement("script");
         script.src = path;
         script.async = async;
@@ -210,36 +200,35 @@ const App = {
       this._scriptCache.set(path, promise);
     }
 
-    const promise = this._scriptCache.get(path);
-
-    if (!promise) {
-      return Promise.reject(new Error(`No cache for script: ${path}`));
+    try {
+      await promise;
+      onload?.();
+    } catch (err) {
+      this._scriptCache.delete(path);
+      onerror?.();
+      throw err;
     }
-
-    return promise
-      .then(() => {
-        onload?.();
-      })
-      .catch((err) => {
-        onerror?.();
-        throw err;
-      });
   },
 
+  /**
+   * Регистрирует App в `window.App`. Если `window.App` уже назначен, повторная
+   * инициализация без `force: true` игнорируется (с предупреждением в консоль).
+   */
   init(options: AppInitOptions = {}) {
-    if ((window as Window).App && !options.force) {
+    if (window.App && !options.force) {
       console.warn("window.App уже существует. Используйте force=true для перезаписи.");
       return this;
     }
 
-    (window as Window).App = this;
-
     this._debug = !!options.debug;
+    this._ymID = options.ymID ?? null;
+    window.App = this;
 
     return this;
   },
 
-  renderJSX(elem: HTMLElement, jsx: React.ReactNode) {
+  /** Рендерит React-дерево `jsx` внутрь `elem`, переиспользуя ранее созданный для него root. */
+  renderJSX(elem: HTMLElement, jsx: ReactNode): void {
     let root = reactRoots.get(elem);
 
     if (!root) {
@@ -250,18 +239,19 @@ const App = {
     root.render(jsx);
   },
 
-  debug(...args: any[]) {
+  /** Логирует в консоль, только если App был инициализирован с `debug: true`. */
+  debug(...args: unknown[]): void {
     if (!this._debug) return;
     console.log("%c[App]", "color: #888", ...args); // eslint-disable-line no-console
   },
 };
 
-// Привязываем методы к контексту App
+// Привязываем методы к контексту App, чтобы их можно было деструктурировать при экспорте
 App.install = App.install.bind(App);
 App.installClass = App.installClass.bind(App);
 App.loadScript = App.loadScript.bind(App);
-App.init = App.init.bind(App);
 App.debug = App.debug.bind(App);
+App.init = App.init.bind(App);
 
 export default App;
 export const { init, install, installClass, loadScript, renderJSX, debug } = App;

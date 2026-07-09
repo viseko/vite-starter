@@ -19,6 +19,8 @@
 
   font-size: var(--font-size);
   line-height: var(--line-height);
+  text-align: justify;
+  text-wrap: pretty;
 
   p {
     @include trim-margins;
@@ -28,7 +30,13 @@
 
   ul,
   ol {
+    @include trim-margins;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--list-spacing);
     max-width: var(--list-max-width);
+    margin: var(--list-margin);
 
     ul,
     ol {
