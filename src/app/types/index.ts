@@ -3,7 +3,7 @@
  */
 
 /** CSS-селектор для поиска и инициализации DOM-элементов. */
-export type Selector = string;
+export type Selector = `.js-${string}` | `[data-${string}]`;
 
 /** Функция инициализации DOM-элемента, возвращающая связанный с ним экземпляр. */
 export type InitFunction<T, O> = (el: HTMLElement, options: O) => T;

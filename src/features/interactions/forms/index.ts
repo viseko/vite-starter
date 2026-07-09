@@ -3,8 +3,7 @@ import Form from "@/shared/lib/ui-classes/Form";
 
 installClass(".js-form", Form, {
   onSuccess(form) {
-    const errorElem = form.querySelector(".form-error");
-    errorElem && errorElem.remove();
+    form.querySelector(".form-error")?.remove();
   },
   onError(form, message) {
     let errorElem = form.querySelector(".form-error");

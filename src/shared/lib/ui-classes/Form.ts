@@ -1,143 +1,154 @@
-type Options = {
+declare global {
+  interface HTMLFormElement {
+    /** Экземпляр Form, инициализированный на этом элементе (см. installClass(".js-form", Form, ...)). */
+    Form?: Form;
+    /**
+     * Контроллеры полей формы. Заполняются внешним скриптом валидации полей
+     * (не входит в этот репозиторий, например компонент Bitrix) — если он не
+     * подключён на странице, свойство просто отсутствует и клиентская
+     * валидация полей отключается сама собой.
+     */
+    inputFields?: Record<string, LegacyFormField>;
+  }
+
+  interface Element {
+    /** UI-компонент поля, отображающий его ошибку. Заполняется тем же внешним скриптом. */
+    FieldText?: LegacyFieldText;
+  }
+
+  // eslint-disable-next-line no-var -- ambient-декларация глобальной переменной ядра Bitrix
+  var BX: BitrixCore | undefined;
+}
+
+interface LegacyFormField {
+  validate(): void;
+  valid: boolean;
+  disabled: boolean;
+}
+
+interface LegacyFieldText {
+  setInvalid(message: string): void;
+}
+
+interface BitrixCore {
+  bitrix_sessid?: () => string;
+}
+
+interface FormResponseBody {
+  status?: string;
+  message?: string;
+  errors?: Record<string, string> | Array<[string, string]>;
+  reload?: boolean;
+  redirect?: string;
+  MESSAGE?: string;
+}
+
+interface FormOptions {
   errorClass?: string;
   successClass?: string;
   awaitClass?: string;
   resetAfterSuccess?: boolean;
   resetDelay?: number;
-  onError?: () => void;
-  onSubmit?: () => void;
-  onSuccess?: () => void;
-};
+  onError?: (form: HTMLFormElement, message: string) => void;
+  onSubmit?: (form: HTMLFormElement) => void;
+  onSuccess?: (form: HTMLFormElement, data: unknown) => void;
+}
 
-type FieldData = {
-  name: string;
-};
-
+/**
+ * AJAX-отправка формы с опциональной клиентской валидацией полей.
+ *
+ * Валидация полей (`fields`/`validate()`) работает только если на странице
+ * подключён внешний скрипт, заполняющий `formElement.inputFields` — иначе
+ * `fields` остаётся пустым и форма отправляется без клиентской проверки.
+ */
 export default class Form {
   errorClass: string;
   successClass: string;
   awaitClass: string;
   resetAfterSuccess: boolean;
   resetDelay: number;
-  onError?: () => void;
-  onSubmit?: () => void;
-  onSuccess?: () => void;
+  onError?: (form: HTMLFormElement, message: string) => void;
+  onSubmit?: (form: HTMLFormElement) => void;
+  onSuccess?: (form: HTMLFormElement, data: unknown) => void;
   form: HTMLFormElement;
   redirect?: string;
   noReset: boolean;
-  fields: FieldData[];
-  submitButton: HTMLButtonElement | null;
+  fields: LegacyFormField[];
+  submitButton: HTMLButtonElement | HTMLInputElement | null;
 
-  constructor(formElement: HTMLFormElement, options: Options) {
-    (this.errorClass = options.errorClass || "_error"),
-      (this.successClass = options.successClass || "_success"),
-      (this.awaitClass = options.awaitClass || "_await"),
-      (this.resetAfterSuccess = options.resetAfterSuccess || true),
-      (this.resetDelay = options.resetDelay || 10000),
-      (this.onError = options.onError);
+  constructor(formElement: HTMLElement, options: FormOptions) {
+    if (!(formElement instanceof HTMLFormElement)) {
+      throw new TypeError("Form: элемент должен быть <form>");
+    }
+
+    this.errorClass = options.errorClass ?? "_error";
+    this.successClass = options.successClass ?? "_success";
+    this.awaitClass = options.awaitClass ?? "_await";
+    this.resetAfterSuccess = options.resetAfterSuccess ?? true;
+    this.resetDelay = options.resetDelay ?? 10000;
+    this.onError = options.onError;
     this.onSubmit = options.onSubmit;
     this.onSuccess = options.onSuccess;
 
     this.form = formElement;
     this.redirect = formElement.dataset.redirect;
+    this.noReset = formElement.dataset.reset === "false";
 
-    const dataReset = formElement.dataset.reset;
-    this.noReset = dataReset === "false";
+    this.fields = formElement.inputFields
+      ? [...formElement.querySelectorAll("[name]")]
+          .map((field) => {
+            const name = field.getAttribute("name");
+            return name ? formElement.inputFields?.[name] : undefined;
+          })
+          .filter((field): field is LegacyFormField => field !== undefined)
+      : [];
 
-    const fieldNames = [...formElement.querySelectorAll("[name]")];
-    this.fields = [];
+    this.form.addEventListener("submit", (event) => this.submitHandler(event));
 
-    if (fieldNames.length && formElement.inputFields) {
-      this.fields = fieldNames
-        .map((field) => {
-          const name = field.name;
-          return formElement.inputFields[name];
-        })
-        .filter(Boolean);
-    }
-
-    this.form.addEventListener("submit", (event) => {
-      this.submitHandler(event);
-    });
-
-    this.submitButton = formElement.querySelector("[type='submit']");
-    this.submitButton &&
-      this.submitButton.addEventListener("click", (event) => {
-        this.submitButtonHandler(event);
-      });
+    this.submitButton = formElement.querySelector<HTMLButtonElement | HTMLInputElement>(
+      "[type='submit']"
+    );
 
     // Приделываем инстанс к DOM-объекту
     formElement.Form = this;
   }
 
-  submitHandler(event) {
+  private submitHandler(event: SubmitEvent): void {
     event.preventDefault();
+    if (!this.validate()) return;
     this.send();
   }
 
-  submitButtonHandler(event) {
-    const isValid = this.validate();
-
-    if (isValid) {
-      return true;
-    } else {
-      event.preventDefault();
-    }
+  /** Валидация формы: true, если все известные поля валидны (или полей нет). */
+  validate(): boolean {
+    return this.fields.every((field) => {
+      field.validate();
+      return field.valid !== false;
+    });
   }
 
-  // Валидация формы
-  validate() {
-    const fields = this.fields;
-
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      field?.validate();
-
-      if (field.valid === false) return false;
-    }
-
-    return true;
-  }
-
-  // Отправка формы
-  send() {
+  /** Отправка формы через fetch (application/x-www-form-urlencoded). */
+  send(): void {
     this.setLock(true);
-    this.onSubmit && this.onSubmit(this.form);
+    this.onSubmit?.(this.form);
 
     const form = this.form;
     const url = form.action;
     const formData = new FormData(form);
 
     // * Добавляем sessid
-    let sessid = null;
-    if (typeof BX !== "undefined" && typeof BX.bitrix_sessid === "function") {
-      sessid = BX.bitrix_sessid();
-    }
+    const sessid = typeof BX !== "undefined" ? BX?.bitrix_sessid?.() : undefined;
     if (sessid) {
       formData.append("sessid", sessid);
     }
 
-    // * Добавляем form_placement
-    // const button = event?.submitter || this.submitButton;
-    // const getFormPlacement = (submitButton) => {
-    //   if (!submitButton) return "unknown";
-    //   if (submitButton.closest("header.page-header")) return "header";
-    //   if (submitButton.closest("header.page-title")) return "slider";
-    //   if (submitButton.closest("footer")) return "footer";
-    //   const closestSection = submitButton.closest(".page-section");
-    //   if (closestSection) return closestSection.id || "section";
-    //   return "other";
-    // };
-    // const formPlacement = getFormPlacement(button);
-    // formData.append("form_placement", formPlacement);
-
     // * Добавляем url (если нужно отправлять как поле, а не просто fetch)
     formData.append("url", window.location.href);
 
-    // Преобразуем FormData → URLSearchParams
+    // Преобразуем FormData → URLSearchParams (файлы urlencoded-запросом не передать — пропускаем)
     const body = new URLSearchParams();
     for (const [key, value] of formData.entries()) {
-      body.append(key, value);
+      if (typeof value === "string") body.append(key, value);
     }
 
     fetch(url, {
@@ -147,15 +158,17 @@ export default class Form {
       },
       body: body.toString(),
     })
-      .then((response) => {
+      .then(async (response) => {
         const contentType = response.headers.get("Content-Type");
-        const isJson = contentType && contentType.includes("application/json");
-        return Promise.all([response.status, isJson ? response.json() : response.text()]);
+        const isJson = !!contentType && contentType.includes("application/json");
+        const data = isJson ? ((await response.json()) as FormResponseBody) : await response.text();
+        return { responseStatus: response.status, data };
       })
-      .then(([responseStatus, data]) => {
-        const { status, message, errors, reload, redirect } = data;
+      .then(({ responseStatus, data }) => {
+        const body: FormResponseBody = typeof data === "string" ? {} : data;
+        const { status, message, errors, reload, redirect } = body;
 
-        if (status && status === "error") {
+        if (status === "error") {
           // * вывод текста общей ошибки
           if (message) {
             this.handleError(message);
@@ -163,22 +176,19 @@ export default class Form {
 
           // * вывод ошибок полей
           if (errors) {
-            const errosList = errors.map ? errors : Object.entries(errors); // пришёл массив или объект?
-            errosList.forEach(([fieldName, msg]) => {
-              const input = form.querySelector(`[name='${fieldName}']`);
-              if (!input) return;
-
-              const field = input.closest(".field")?.FieldText;
-              field && field.setInvalid(msg);
+            const errorsList = Array.isArray(errors) ? errors : Object.entries(errors);
+            errorsList.forEach(([fieldName, msg]) => {
+              const input = form.querySelector(`[name='${CSS.escape(fieldName)}']`);
+              const field = input?.closest(".field")?.FieldText;
+              field?.setInvalid(msg);
             });
           }
         } else if (responseStatus === 200) {
           this.handleSuccess(data);
         } else {
           const errorMessage =
-            typeof data === "object" && data.MESSAGE
-              ? data.MESSAGE
-              : data || "Ошибка обработки ответа сервера";
+            body.MESSAGE ??
+            (typeof data === "string" && data ? data : "Ошибка обработки ответа сервера");
           this.handleError(errorMessage);
         }
 
@@ -190,37 +200,39 @@ export default class Form {
           window.location.href = redirect;
         }
       })
-      .catch((err) => this.handleError(err.message))
+      .catch((err: unknown) => {
+        this.handleError(err instanceof Error ? err.message : String(err));
+      })
       .finally(() => this.setLock(false));
   }
 
-  // Включене/отключение режима ожидания
-  // * блокировка кнопки и полей ввода
-  // * навешивание css-класса ожидания
-  setLock(bool) {
-    this.submitButton && (this.submitButton.disabled = bool);
+  /**
+   * Включает/отключает режим ожидания: блокировка кнопки и полей ввода,
+   * css-класс ожидания на форме.
+   */
+  setLock(locked: boolean): void {
+    if (this.submitButton) this.submitButton.disabled = locked;
     this.fields.forEach((field) => {
-      field.disabled = bool;
+      field.disabled = locked;
     });
-    this.form.classList[bool ? "add" : "remove"](this.awaitClass);
+    this.form.classList[locked ? "add" : "remove"](this.awaitClass);
   }
 
-  // Очистка формы
-  reset() {
+  /** Очистка формы. */
+  reset(): void {
     this.form.reset();
     this.form.querySelectorAll("._success").forEach((elem) => elem.classList.remove("_success"));
   }
 
-  // Обработка успешной отправки
-  handleSuccess(data) {
+  /** Обработка успешной отправки. */
+  handleSuccess(data: unknown): void {
     if (!this.noReset) {
       this.reset();
     }
 
     this.form.classList.add(this.successClass);
-    this.onSuccess && this.onSuccess(this.form, data);
+    this.onSuccess?.(this.form, data);
 
-    // Редирект если указан
     if (this.redirect) {
       window.location.href = this.redirect;
       return; // дальше таймеры и классы уже не нужны
@@ -233,9 +245,9 @@ export default class Form {
     }
   }
 
-  // Обработка ошибки
-  handleError(message) {
+  /** Обработка ошибки. */
+  handleError(message: string): void {
     this.form.classList.add(this.errorClass);
-    this.onError && this.onError(this.form, message);
+    this.onError?.(this.form, message);
   }
 }
