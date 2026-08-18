@@ -7,17 +7,18 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
+    "ignoreDeprecations": "6.0",
 
     /* Vite */
     "types": ["vite/client"],
 
-    /* Пути (если используешь @) */
+    /* Пути */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
 
-    /* Строгость (адекватная) */
+    /* Строгость */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
