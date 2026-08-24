@@ -1,9 +1,10 @@
 mixin accordion(data={})
+  //- Аккордион через CSS-grid
+  //- name: string
+  //- className?: string | null = null
+
   .js-accordion(
     class=data.className,
-    class=(data.theme ? `accordion--theme--${data.theme}` : null),
-    class=(data.size ? `accordion--size--${data.size}` : null),
-    data-role=data.role,
     data-name=data.name
   )
     block

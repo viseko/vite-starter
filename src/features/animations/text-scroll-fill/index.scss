@@ -1,0 +1,15 @@
+.js-text-scroll-fill {
+  .text-word {
+    white-space: nowrap;
+  }
+
+  .text-part-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .text-part:nth-child(2) {
+    user-select: none;
+    pointer-events: none;
+  }
+}

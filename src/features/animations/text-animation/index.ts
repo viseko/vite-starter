@@ -11,7 +11,7 @@ install("[data-ta]", (block) => {
     return;
   }
 
-  const split = data.taSplit || "letters";
+  const split = data.taSplit ?? "letters";
   const speed = Number(data.taSpeed) || 300;
   const delay = Number(data.taDelay) || 0;
   const gap = Number(data.taGap) || 0;

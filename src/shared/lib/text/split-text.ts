@@ -76,7 +76,7 @@ export function splitByVisualLines(elem: HTMLElement) {
   const letterSpans: HTMLSpanElement[] = [];
 
   textNodes.forEach((node) => {
-    const chars = node.textContent?.split("") || [];
+    const chars = node.textContent?.split("") ?? [];
 
     chars.forEach((char) => {
       const span = document.createElement("span");

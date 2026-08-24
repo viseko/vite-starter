@@ -1,5 +1,7 @@
+// Базовые стили
 @import "shared/styles";
 
+// Стили компонентов
 @layer components {
   @import "shared/ui";
   @import "widgets";

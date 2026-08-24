@@ -6,7 +6,6 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "preview": "vite preview",
     "imports": "node ./app/npm-scripts/add-imports.js",
     "tiny": "node ./app/npm-scripts/prepare-images.js",
     "ftp": "node ./app/npm-scripts/deploy-ftp.js",
@@ -59,6 +58,7 @@
     "vite-plugin-purgecss": "^0.2.13"
   },
   "dependencies": {
+    "gsap": "^3.15.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "swiper": "^12.1.3",

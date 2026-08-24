@@ -18,12 +18,14 @@
   --section-padding-first: #{fluid(24, 40)}; // Отступ первой секции
   --section-padding-last: #{fluid(56, 128)}; // Отступ последней секции
 
-  // * типографика
+  // * текст - общее
   --font-family: "Inter", helvetica, sans-serif;
   --font-weight: 400;
   --font-size: #{fluid(16, 18)};
   --line-height: 150%;
   --paragraph-spacing: 16px;
+
+  // * текст - заголовки
   --heading-weight: 700;
   --heading-line-height: 135%;
   --h1-margin: #{fluid(32, 64)} 0 #{fluid(24, 40)};
@@ -32,13 +34,17 @@
   --h2-size: #{fluid(20, 32)};
   --h3-margin: #{fluid(24, 40)} 0 #{fluid(16, 24)};
   --h3-size: #{fluid(18, 24)};
+
+  // * списки ul/ol
   --list-spacing: 0px;
   --list-margin: 0px;
 
-  // * цвет и декорации
-  --color: #{map-get($colors, black)};
-  --bg-color: #{map-get($colors, white)}; // Фон. цвет страницы
-  --bg-overlay: #{rgba(#000, 40%)};
+  // * цвет фона/текста
+  --color-text: #{map-get($colors, black)};
+  --color-bg: #{map-get($colors, white)}; // Фон. цвет страницы
+  --color-bg-overlay: #{rgba(#000, 40%)};
+
+  // * оформление/декор
   --blur-overlay: blur(15px);
 
   // * анимации и переходы

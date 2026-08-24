@@ -1,8 +1,10 @@
 mixin {{kebabCase}}(data={})
+  //- Имя компонента
+  //- className?: string = null
+  //- role?: string = null
   .{{kebabCase}}(
     class=data.className,
     class=(data.theme ? `{{kebabCase}}--theme--${data.theme}` : null),
     class=(data.size ? `{{kebabCase}}--size--${data.size}` : null),
     data-role=data.role,
   ) {{kebabCase}}
-  

@@ -3,8 +3,13 @@ import { install } from "@/app/App";
 install("[data-ripple-effect]", (elem) => {
   const { overflow, position } = getComputedStyle(elem);
 
-  overflow === "visible" && (elem.style.overflow = "hidden");
-  position === "static" && (elem.style.position = "relative");
+  if (overflow === "visible") {
+    elem.style.overflow = "hidden";
+  }
+
+  if (position === "static") {
+    elem.style.position = "relative";
+  }
 
   elem.addEventListener("mouseenter", function (event) {
     const ripple = document.createElement("span");
