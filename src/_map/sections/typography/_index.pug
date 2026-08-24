@@ -1,0 +1,21 @@
+section.map-panel(data-map-panel="typography")
+  h2.map-panel__title Типографика
+  p.map-panel__description Начертания шрифтов, заголовки и текстовые стили проекта.
+
+  h3.map-subtitle Шрифты
+  //- Список берётся из src/shared/styles/base/fonts.scss.
+  .map-fonts(data-map-fonts)
+    p.map-panel__empty Загрузка…
+
+  //- Заголовки
+  h1 Заголовок первого уровня
+  h2 Заголовок второго уровня
+  h3 Заголовок третьего уровня
+  h4 Заголовок четвёртого уровня
+  h5 Заголовок пятого уровня
+  h6 Заголовок шестого уровня
+
+  h3.map-subtitle Текстовые классы
+  p.map-panel__hint Классы берутся из src/shared/styles/typography/text.scss — добавьте туда .класс{}, чтобы он появился здесь автоматически.
+  .map-text-classes(data-map-text-classes)
+    p.map-panel__empty Загрузка…

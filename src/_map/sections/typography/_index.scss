@@ -1,0 +1,76 @@
+.map-subtitle {
+  margin: 40px 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.map-panel__hint {
+  margin: 0 0 16px;
+  color: map-get($colors, gray);
+  font-size: 14px;
+}
+
+.map-fonts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.map-font-specimen {
+  padding: 20px;
+  border: 1px solid map-get($colors, stroke);
+  border-radius: 12px;
+}
+
+.map-font-specimen__meta {
+  margin: 0 0 8px;
+  color: map-get($colors, gray);
+  font-size: 14px;
+}
+
+.map-font-specimen__sample {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.4;
+
+  & + & {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid map-get($colors, stroke);
+  }
+}
+
+.map-font-specimen__weight {
+  flex-shrink: 0;
+  width: 28px;
+  color: map-get($colors, gray);
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.map-text-classes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.map-text-classes__item {
+  padding: 10px 16px;
+  border: 1px solid map-get($colors, stroke);
+  border-radius: 8px;
+}
+
+.map-text-classes__name {
+  display: block;
+  margin-bottom: 4px;
+  color: map-get($colors, gray);
+  font-family: monospace;
+  font-size: 12px;
+}

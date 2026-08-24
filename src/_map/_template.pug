@@ -1,0 +1,47 @@
+include @/shared/ui/meta/favicons/_index
+
+doctype html
+
+html(lang="ru")
+  head
+    title Карта вёрстки
+
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
+    meta(name="robots", content="noindex, nofollow")
+
+    //- Стили и скрипт карты — отдельный вход сборки (src/_map/index.*),
+    //- в main.min.js/main.min.css не попадают, см. vite.config.ts
+    if (IS_DEV)
+      link(rel="stylesheet", href="/_map/index.scss")
+    else
+      link(rel="stylesheet", href=`${BASE_URL}/assets/css/map.min.css?v=${TIMESTAMP}`)
+
+    +favicons
+
+  body.map(data-base-url=BASE_URL)
+    .map-layout
+      aside.map-nav
+        p.map-nav__title Карта вёрстки
+
+        nav
+          ul.map-nav__list
+            li.map-nav__item
+              button.map-nav__link(type="button" data-map-tab="pages") Страницы
+            li.map-nav__item
+              button.map-nav__link(type="button" data-map-tab="typography") Типографика
+            li.map-nav__item
+              button.map-nav__link(type="button" data-map-tab="palette") Палитра
+            li.map-nav__item
+              button.map-nav__link(type="button" data-map-tab="icons") Иконки
+            li.map-nav__item
+              button.map-nav__link(type="button" data-map-tab="content") Контент
+
+      main.map-content
+        block panels
+
+    if (IS_DEV)
+      script(src="/_map/index.ts" type="module")
+    else
+      script(src=`${BASE_URL}/assets/js/map.min.js?v=${TIMESTAMP}`)

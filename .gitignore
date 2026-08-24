@@ -4,3 +4,6 @@
 .idea
 /plans/
 .env
+
+# Автогенерируемые данные карты вёрстки (см. app/modules/buildPlugins.ts)
+/src/_map/generated/

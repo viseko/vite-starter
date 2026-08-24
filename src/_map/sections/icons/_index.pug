@@ -1,0 +1,6 @@
+section.map-panel(data-map-panel="icons")
+  h2.map-panel__title Иконки
+  p.map-panel__description Иконки из public/assets/img/sprite.svg. Id используется в +icon('id').
+
+  .map-icons(data-map-icons data-sprite-url=`${PATH.img}/sprite.svg?v=${TIMESTAMP}`)
+    p.map-panel__empty Загрузка…

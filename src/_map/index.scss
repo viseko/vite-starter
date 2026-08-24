@@ -1,0 +1,138 @@
+// Точка входа стилей карты вёрстки (/map).
+// Отдельный вход сборки (см. vite.config.ts) — в main.min.css не попадает.
+
+// Токены, база, типографика и миксины сайта — нужны, чтобы компоненты
+// на карте выглядели так же, как на реальных страницах.
+@import "@/shared/styles";
+
+// Стили самих разделов карты (палитра, иконки, типографика и т.д.)
+@import "./sections";
+
+// Собственный "хром" карты: сайдбар, табы, сетки превью.
+// Классы сознательно с префиксом map-, чтобы не пересекаться со стилями сайта.
+
+.map {
+  min-height: 100vh;
+  background: map-get($colors, silver);
+}
+
+.map-layout {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100vh;
+
+  @include breakpoint(lg, down) {
+    flex-direction: column;
+  }
+}
+
+.map-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0;
+  width: 260px;
+  height: 100vh;
+  padding: 24px 16px;
+  overflow-y: auto;
+  color: map-get($colors, white);
+  background: map-get($colors, dark);
+
+  // На планшете/мобильном сайдбар превращается в горизонтальную панель сверху
+  @include breakpoint(lg, down) {
+    width: 100%;
+    height: auto;
+    padding: 12px 16px;
+    overflow: hidden;
+  }
+}
+
+.map-nav__title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+
+  @include breakpoint(lg, down) {
+    display: none;
+  }
+}
+
+.map-nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include breakpoint(lg, down) {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.map-nav__link {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.15s var(--bezier);
+  cursor: pointer;
+
+  @include breakpoint(lg, down) {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    background: rgba(map-get($colors, white), 0.08);
+  }
+
+  &.is-active {
+    color: map-get($colors, white);
+    background: map-get($colors, primary);
+  }
+}
+
+.map-content {
+  flex-grow: 1;
+  min-width: 0;
+  padding: 40px;
+
+  @include breakpoint(lg, down) {
+    padding: 24px 16px;
+  }
+}
+
+.map-panel {
+  display: none;
+
+  &.is-active {
+    display: block;
+  }
+}
+
+.map-panel__title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.map-panel__description {
+  margin: 0 0 32px;
+  color: map-get($colors, gray);
+}
+
+.map-panel__empty {
+  padding: 24px;
+  color: map-get($colors, gray);
+  border: 1px dashed map-get($colors, stroke);
+  border-radius: 12px;
+}

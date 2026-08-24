@@ -1,5 +1,6 @@
 import { viteConvertPugInHtml } from "@mish.dev/vite-convert-pug-in-html";
 import type { Plugin } from "vite";
+import { mapDataPlugin } from "./mapDataPlugin";
 
 export interface PluginsOptions {
   locals: Record<string, any>;
@@ -24,6 +25,8 @@ export default function buildPlugins(options: PluginsOptions) {
       pugOptions: { pretty: true },
       locals: options.locals,
     }),
+    // Генерирует src/_map/generated/data.json до полного релоада от scssHmrPlugin ниже
+    mapDataPlugin(),
     scssHmrPlugin,
   ];
 }

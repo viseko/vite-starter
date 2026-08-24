@@ -1,0 +1,5 @@
+@import "./pages";
+@import "./typography";
+@import "./palette";
+@import "./icons";
+// content/_index.scss не нужен — раздел целиком переиспользует .content из shared/styles

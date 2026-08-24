@@ -43,13 +43,16 @@ export default defineConfig(({ mode }) => {
         input: {
           main: resolve(__dirname, "src/main.ts"),
           styles: resolve(__dirname, "src/main.scss"),
+          // Карта вёрстки (/map) — полностью отдельный бандл, не подмешивается в main.min.*
+          map: resolve(__dirname, "src/_map/index.ts"),
+          mapStyles: resolve(__dirname, "src/_map/index.scss"),
         },
         output: {
           entryFileNames: "assets/js/[name].min.js",
           chunkFileNames: "assets/js/chunks/[name].js",
           assetFileNames: (assetInfo: any) =>
             assetInfo.name?.endsWith(".css")
-              ? `assets/css/main.min[extname]`
+              ? `assets/css/${assetInfo.name.startsWith("map") ? "map" : "main"}.min[extname]`
               : "assets/[name][extname]",
         },
         plugins: [

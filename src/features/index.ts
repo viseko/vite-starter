@@ -13,9 +13,9 @@ import "./interactions/back"; // Кнопка "Назад" (для 404 стра�
 // import "./interactions/anchor-scrollspy"; // Подсветка активной ссылки на якорь при скролле
 
 // АНИМАЦИИ
-// import "./animations/animate-count";
-// import "./animations/animate-on-scroll";
-import "./animations/ripple-effect";
+// import "./animations/animate-count"; // Анимация пузомерок
+// import "./animations/animate-on-scroll"; // Навешивание класса _play для анимаций по скроллу
+import "./animations/ripple-effect"; // Пузырёк при ховере на кнопки
 
 // СТОРОННИЕ БИБЛИОТЕКИ
 // import "./vendors/fancybox"; // модальная галерея
